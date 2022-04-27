@@ -14,6 +14,6 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         TextView animalTitle = (TextView) findViewById(R.id.animalTitle);
         animalTitle.setText("To the Bears:");
         TextView detailedDirectionText = (TextView) findViewById(R.id.detailedDirectionText);
-        detailedDirectionText.setText("Proceed from Front Street down Treetops Way, 200 ft on your left.\nTurn Right on Bear Blvd, 100 ft ahead.\n The Exhibit will be directly on your left.");
+        detailedDirectionText.setText("Proceed from Front Street down Treetops Way, 200 ft on your left.\n\nTurn Right on Bear Blvd, 100 ft ahead.\n\nThe Exhibit will be directly on your left.");
     }
 }
