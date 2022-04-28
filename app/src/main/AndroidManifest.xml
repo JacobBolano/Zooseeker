@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CSE110_team45">
         <activity
-            android:name=".plan"
+            android:name=".DirectionDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
