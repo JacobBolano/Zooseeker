@@ -12,7 +12,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, SearchActivity.class);
+        // change to search activity later
+        Intent intent = new Intent(this, plan.class);
         startActivity(intent);
 
 
