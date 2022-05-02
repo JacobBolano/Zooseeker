@@ -44,7 +44,7 @@ public class plan extends AppCompatActivity {
         List<String> orderedPathStreets = new ArrayList<String>();
         List<Integer> orderedPathDistances = new ArrayList<Integer>();
 
-
+        //Pathfinding
         String start = "entrance_exit_gate";
         orderedPath.add(start);
         String streetName = "";
@@ -77,6 +77,20 @@ public class plan extends AppCompatActivity {
             orderedPathStreets.add(streetName);
             visitsTemp.remove(dest);
         }
+        //to exit
+        int lastDistance = 0;
+        String lastStreet = "";
+        GraphPath<String, IdentifiedWeightedEdge> path =
+                DijkstraShortestPath.findPathBetween(g, orderedPath.get(orderedPath.size()-1), start);
+        for(IdentifiedWeightedEdge e : path.getEdgeList()){
+            lastDistance += g.getEdgeWeight(e);
+            lastStreet = eInfo.get(e.getId()).street;
+        }
+        orderedPath.add(start);
+        orderedPathDistances.add(lastDistance);
+        orderedPathStreets.add(lastStreet);
+
+        //computation of total route paths
         List<Integer> totalRoutePaths = new ArrayList<>();
         totalRoutePaths.set(0,orderedPathDistances.get(0));
         for(int i = 1; i < orderedPathDistances.size(); i++){
