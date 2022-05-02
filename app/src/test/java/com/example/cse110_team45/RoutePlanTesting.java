@@ -102,7 +102,7 @@ public class RoutePlanTesting {
         orderedPathStreets.add(lastStreet);
 
         //check ordered path and distances to see if there is nothing
-//        assertNotNull(g.edgeSet());
+        assertNotNull(orderedPath);
 
 
 //        assertNotNull(g.edgeSet());
@@ -172,6 +172,7 @@ public class RoutePlanTesting {
         orderedPathDistances.add(lastDistance);
         orderedPathStreets.add(lastStreet);
 
+        assertNotNull(orderedPath);
         //check ordered path and distances to see if there is nothing
 //        assertNotNull(g.edgeSet());
     }
