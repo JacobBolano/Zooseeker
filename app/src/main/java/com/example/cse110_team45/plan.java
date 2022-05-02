@@ -77,7 +77,11 @@ public class plan extends AppCompatActivity {
             orderedPathStreets.add(streetName);
             visitsTemp.remove(dest);
         }
-
+        List<Integer> totalRoutePaths = new ArrayList<>();
+        totalRoutePaths.set(0,orderedPathDistances.get(0));
+        for(int i = 1; i < orderedPathDistances.size(); i++){
+            totalRoutePaths.set(i, totalRoutePaths.get(i-1) + orderedPathDistances.get(i));
+        }
     }
 
 }
