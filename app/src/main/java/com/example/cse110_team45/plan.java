@@ -25,9 +25,15 @@ import android.os.Bundle;
 
 public class plan extends AppCompatActivity {
 
+    List<String> orderedPath;
+    List<String> orderedPathStreets;
+    List<Integer> orderedPathDistances;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Bundle bundle = getIntent().getExtras();
+        List<String> visits =  bundle.getStringArrayList("destinationList");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
 
@@ -39,10 +45,9 @@ public class plan extends AppCompatActivity {
         Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("assets/sample_edge_info.json");
 
         //will be imported from search bar
-        List<String> visits = new ArrayList<String>();
-        List<String> orderedPath = new ArrayList<String>();
-        List<String> orderedPathStreets = new ArrayList<String>();
-        List<Integer> orderedPathDistances = new ArrayList<Integer>();
+        orderedPath = new ArrayList<String>();
+        orderedPathStreets = new ArrayList<String>();
+        orderedPathDistances = new ArrayList<Integer>();
 
         //Pathfinding
         String start = "entrance_exit_gate";

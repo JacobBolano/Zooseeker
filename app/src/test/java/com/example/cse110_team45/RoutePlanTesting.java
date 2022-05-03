@@ -11,7 +11,9 @@ import static org.junit.Assert.assertNull;
 import android.content.Context;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.test.core.app.ApplicationProvider;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,11 +42,31 @@ public class RoutePlanTesting {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Test
+    public void basicTest(){
+        plan myPlan = new plan();
+        SearchActivity myActivity = new SearchActivity();
+
+        ArrayList<String> destinationList = new ArrayList<String>();
+        destinationList.add("gorillas");
+        destinationList.add("lions");
+        destinationList.add("gators");
+        Intent intent = new Intent(myActivity, plan.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("destinationList", (ArrayList<String>) destinationList);
+
+        myPlan.onCreate(bundle);
+
+        assertNotNull(myPlan.orderedPath);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Test
     public void nonEmptyListTest(){
         Context context = ApplicationProvider.getApplicationContext();
         String start = "entrance_exit_gate";
-        /*// 1. Load the graph...
-        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("assets/sample_zoo_graph.json");
+        // 1. Load the graph...
+        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("sample_zoo_graph.json");
 
         // 2. Load the information about our nodes and edges...
         Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("assets/sample_node_info.json");
@@ -51,6 +74,10 @@ public class RoutePlanTesting {
 
         //will be imported from search bar
         List<String> visits = new ArrayList<String>();
+        visits.add("gorillas");
+        visits.add("lions");
+        visits.add("gators");
+
         List<String> orderedPath = new ArrayList<String>();
         List<String> orderedPathStreets = new ArrayList<String>();
         List<Integer> orderedPathDistances = new ArrayList<Integer>();
@@ -102,7 +129,7 @@ public class RoutePlanTesting {
         orderedPathStreets.add(lastStreet);
 
 
-         */
+
         //check ordered path and distances to see if there is nothing
         assertNotNull(start);
     }
