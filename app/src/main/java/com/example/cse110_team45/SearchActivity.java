@@ -59,6 +59,15 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+
+    public void setDestinationList(List<String> destinationList){
+        this.destinationList = destinationList;
+    }
+
+    public void setKeySet(Set<String> keySet){
+        this.keySet = keySet;
+    }
+
     public void onSearchClick(View view) {
 
         // TODO set all recycler colors to gray
@@ -66,7 +75,7 @@ public class SearchActivity extends AppCompatActivity {
         EditText searchBar = findViewById(R.id.search_bar);
         String searchText = searchBar.getText().toString();
 
-        Set<String> returnSet = searchAlgo(searchText, this.keySet);
+        Set<String> returnSet = searchAlgo(searchText);
 
         List<String> recyclerList = new ArrayList<>(returnSet);
 
@@ -88,21 +97,31 @@ public class SearchActivity extends AppCompatActivity {
 
         String destination = textView.getText().toString();
         System.out.println(destination);
-        if(! destinationList.contains(destination)){
-            destinationList.add(destination);
-            this.exhibitCount++;
+
+
+        if(updateDestinationList(destination)){
             exhibitCountView.setText(String.format("%d", this.exhibitCount));
         }
         view.setBackgroundColor(0xFF73b4cd);
 
     }
 
-    public Set<String> searchAlgo(String searchText, Set<String> keySet){
+    public boolean updateDestinationList(String destination){
+        if(! destinationList.contains(destination)){
+            destinationList.add(destination);
+            this.exhibitCount++;
+            return true;
+        }
+        return false;
+
+    }
+
+    public Set<String> searchAlgo(String searchText){
 
         Set<String> returnSet = new HashSet<>();
         searchText = searchText.toLowerCase(Locale.ROOT);
 
-        for(String key : keySet){
+        for(String key : this.keySet){
             System.out.println(key);
             if(key.toLowerCase(Locale.ROOT).contains(searchText)){
                 returnSet.add(key);
@@ -118,5 +137,9 @@ public class SearchActivity extends AppCompatActivity {
 
         System.out.println(destinationList);
         startActivity(intent);
+    }
+
+    public int getExhibitCount(){
+        return this.exhibitCount;
     }
 }

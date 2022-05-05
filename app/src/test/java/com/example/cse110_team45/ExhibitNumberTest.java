@@ -1,6 +1,5 @@
 package com.example.cse110_team45;
 
-
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -41,48 +40,25 @@ import java.util.Set;
 
 @RunWith(AndroidJUnit4.class)
 
-public class SearchCapabilitiesTest {
+public class ExhibitNumberTest {
 
-
+    // Test thatInitial Count is Zero
 
     @Test
-    public void clickableButton(){
+    public void testInitialCountIsZero(){
+        SearchActivity searchActivity = new SearchActivity();
 
-        SearchActivity myActivity = new SearchActivity();
-
-        Set<String> tester = new HashSet<>();
-        tester.add("apples");
-        tester.add("great ape");
-        tester.add("gorilla");
-
-        String key = "ape";
-
-        myActivity.setKeySet(tester);
-        Set<String> results = myActivity.searchAlgo(key);
-
-        Set<String> expected = new HashSet<>();
-        expected.add("great ape");
-        assertEquals(results, expected );
+        assertEquals(searchActivity.getExhibitCount(), 0);
     }
 
 
+    //Test that exhibit count increases by 1
+
     @Test
-    public void noMatchesSearch(){
-        SearchActivity myActivity = new SearchActivity();
-
-        Set<String> tester = new HashSet<>();
-        tester.add("apples");
-        tester.add("great ape");
-        tester.add("gorilla");
-
-        String key = "hawaii";
-
-        myActivity.setKeySet(tester);
-
-        Set<String> results = myActivity.searchAlgo(key);
-        assertEquals(results.size(), 0);
-
+    public void testIncrementingExhibitCount(){
 
     }
+
+    //Test taht exhibit count does not change if duplicate added
 
 }
