@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -36,8 +37,14 @@ public class SearchActivity extends AppCompatActivity {
 
         Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", this);
 
-        this.keySet = vInfo.keySet();
+        this.keySet = new HashSet<String>();
+        //this.keySet = vInfo.keySet();
 
+        for(ZooData.VertexInfo vertex : vInfo.values()) {
+            if(vertex.kind.equals(ZooData.VertexInfo.Kind.EXHIBIT)) {
+                this.keySet.add(vertex.name);
+            }
+        }
         this.destinationList = new ArrayList<>();
 
         adapter = new SearchListAdapter();
@@ -87,8 +94,10 @@ public class SearchActivity extends AppCompatActivity {
 
         Set<String> returnSet = new HashSet<>();
         searchText = searchText.toLowerCase(Locale.ROOT);
+
         for(String key : keySet){
-            if(key.contains(searchText)){
+            System.out.println(key);
+            if(key.toLowerCase(Locale.ROOT).contains(searchText)){
                 returnSet.add(key);
             }
         }
