@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -33,7 +34,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("assets/sample_node_info.json");
+        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", this);
 
         this.keySet = vInfo.keySet();
 
@@ -95,12 +96,11 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onPlanClick(View view) {
-        Intent intent = new Intent(this, plan.class);
-        Bundle bundle = new Bundle();
-        bundle.putStringArrayList("destinationList", (ArrayList<String>) destinationList);
+        Intent intent = new Intent(SearchActivity.this, plan.class);
+
+        intent.putStringArrayListExtra("destinationList", (ArrayList<String>) destinationList);
 
         System.out.println(destinationList);
-        intent.putExtras(bundle);
         startActivity(intent);
     }
 }

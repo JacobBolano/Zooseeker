@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -22,27 +23,35 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class plan extends AppCompatActivity {
+
+    List<String> orderedPath;
+    List<String> orderedPathStreets;
+    List<Integer> orderedPathDistances;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
+        Intent intent = getIntent();
+        List<String> visits = intent.getStringArrayListExtra("destinationList");
+        System.out.println("this is the shit " + visits);
 
         // 1. Load the graph...
-        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("assets/sample_zoo_graph.json");
+        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", this);
 
         // 2. Load the information about our nodes and edges...
-        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("assets/sample_node_info.json");
-        Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("assets/sample_edge_info.json");
+        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", this);
+        Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", this);
 
         //will be imported from search bar
-        List<String> visits = new ArrayList<String>();
-        List<String> orderedPath = new ArrayList<String>();
-        List<String> orderedPathStreets = new ArrayList<String>();
-        List<Integer> orderedPathDistances = new ArrayList<Integer>();
+        orderedPath = new ArrayList<String>();
+        orderedPathStreets = new ArrayList<String>();
+        orderedPathDistances = new ArrayList<Integer>();
 
         //Pathfinding
         String start = "entrance_exit_gate";
@@ -50,7 +59,7 @@ public class plan extends AppCompatActivity {
         String streetName = "";
         List<String> visitsTemp = new ArrayList<String>();
         for(int i = 0; i < visits.size(); i++) {
-            visitsTemp.set(i, visits.get(i));
+            visitsTemp.add(visits.get(i));
         }
         String source = start;
         while(!visitsTemp.isEmpty()) {
@@ -92,10 +101,12 @@ public class plan extends AppCompatActivity {
 
         //computation of total route paths
         List<Integer> totalRoutePaths = new ArrayList<>();
-        totalRoutePaths.set(0,orderedPathDistances.get(0));
+        totalRoutePaths.add(orderedPathDistances.get(0));
         for(int i = 1; i < orderedPathDistances.size(); i++){
-            totalRoutePaths.set(i, totalRoutePaths.get(i-1) + orderedPathDistances.get(i));
+            totalRoutePaths.add(i, totalRoutePaths.get(i-1) + orderedPathDistances.get(i));
         }
+        TextView orderedVisitsView = this.findViewById(R.id.orderedVisits);
+        orderedVisitsView.setText(orderedPath.get(0));
     }
 
 }

@@ -1,17 +1,25 @@
 package com.example.cse110_team45;
 
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.junit.Rule;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import androidx.lifecycle.Lifecycle;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import android.content.Context;
-
+import androidx.lifecycle.Lifecycle;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.test.core.app.ApplicationProvider;
@@ -30,150 +38,42 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @RunWith(AndroidJUnit4.class)
 public class RoutePlanTesting {
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Test
-    public void nonEmptyListTest(){
-        Context context = ApplicationProvider.getApplicationContext();
-        String start = "entrance_exit_gate";
-        /*// 1. Load the graph...
-        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("assets/sample_zoo_graph.json");
-
-        // 2. Load the information about our nodes and edges...
-        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("assets/sample_node_info.json");
-        Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("assets/sample_edge_info.json");
-
-        //will be imported from search bar
-        List<String> visits = new ArrayList<String>();
-        List<String> orderedPath = new ArrayList<String>();
-        List<String> orderedPathStreets = new ArrayList<String>();
-        List<Integer> orderedPathDistances = new ArrayList<Integer>();
-
-        //Pathfinding
-
-        orderedPath.add(start);
-        String streetName = "";
-        List<String> visitsTemp = new ArrayList<String>();
-        for(int i = 0; i < visits.size(); i++) {
-            visitsTemp.set(i, visits.get(i));
-        }
-        String source = start;
-        while(!visitsTemp.isEmpty()) {
-            int minDist = Integer.MAX_VALUE;
-            String dest = null;
-            for(int i = 0; i < visitsTemp.size(); i++){
-                String goal = visitsTemp.get(i);
-                GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, source, goal);
-                int pathDist = 0;
-                String tempStreet = "";
-                for(IdentifiedWeightedEdge e : path.getEdgeList()){
-                    pathDist += g.getEdgeWeight(e);
-                    tempStreet = eInfo.get(e.getId()).street;
-                }
-                if (pathDist < minDist) {
-                    minDist = pathDist;
-                    dest = goal;
-                    streetName = tempStreet;
-                }
-            }
-            source = dest;
-            orderedPath.add(dest);
-            orderedPathDistances.add(minDist);
-            orderedPathStreets.add(streetName);
-            visitsTemp.remove(dest);
-        }
-        //to exit
-        int lastDistance = 0;
-        String lastStreet = "";
-        GraphPath<String, IdentifiedWeightedEdge> path =
-                DijkstraShortestPath.findPathBetween(g, orderedPath.get(orderedPath.size()-1), start);
-        for(IdentifiedWeightedEdge e : path.getEdgeList()){
-            lastDistance += g.getEdgeWeight(e);
-            lastStreet = eInfo.get(e.getId()).street;
-        }
-        orderedPath.add(start);
-        orderedPathDistances.add(lastDistance);
-        orderedPathStreets.add(lastStreet);
-
-
-         */
-        //check ordered path and distances to see if there is nothing
-        assertNotNull(start);
+    static Intent intent;
+    static {
+        intent = new Intent(ApplicationProvider.getApplicationContext(), plan.class);
+        ArrayList<String> destinationList = new ArrayList<String>();
+        destinationList.add("gorillas");
+        destinationList.add("lions");
+        destinationList.add("gators");
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("destinationList", (ArrayList<String>) destinationList);
+        intent.putExtras(bundle);
     }
 
+
+    @Rule
+    public ActivityScenarioRule<plan> planTestRule = new ActivityScenarioRule<>(intent);
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Test
-    public void EmptyListTest(){
-        Context context = ApplicationProvider.getApplicationContext();
-        String start = "entrance_exit_gate";
-        /*
-        // 1. Load the graph...
-        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("assets/sample_zoo_graph.json");
+    public void basicTest(){
 
-        // 2. Load the information about our nodes and edges...
-        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("assets/sample_node_info.json");
-        Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("assets/sample_edge_info.json");
+        ActivityScenario scenario = planTestRule.getScenario();
+        scenario.moveToState(Lifecycle.State.CREATED);
+        scenario.onActivity(activity -> {
+            TextView OrderedVisitsView = activity.findViewById(R.id.orderedVisits);
+            assertNotNull(OrderedVisitsView.getText());
+        });
 
-        //will be imported from search bar
-        List<String> visits = new ArrayList<String>();
-        List<String> orderedPath = new ArrayList<String>();
-        List<String> orderedPathStreets = new ArrayList<String>();
-        List<Integer> orderedPathDistances = new ArrayList<Integer>();
 
-        //Pathfinding
 
-        orderedPath.add(start);
-        String streetName = "";
-        List<String> visitsTemp = new ArrayList<String>();
-        for(int i = 0; i < visits.size(); i++) {
-            visitsTemp.set(i, visits.get(i));
-        }
-        String source = start;
-        while(!visitsTemp.isEmpty()) {
-            int minDist = Integer.MAX_VALUE;
-            String dest = null;
-            for(int i = 0; i < visitsTemp.size(); i++){
-                String goal = visitsTemp.get(i);
-                GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, source, goal);
-                int pathDist = 0;
-                String tempStreet = "";
-                for(IdentifiedWeightedEdge e : path.getEdgeList()){
-                    pathDist += g.getEdgeWeight(e);
-                    tempStreet = eInfo.get(e.getId()).street;
-                }
-                if (pathDist < minDist) {
-                    minDist = pathDist;
-                    dest = goal;
-                    streetName = tempStreet;
-                }
-            }
-            source = dest;
-            orderedPath.add(dest);
-            orderedPathDistances.add(minDist);
-            orderedPathStreets.add(streetName);
-            visitsTemp.remove(dest);
-        }
-        //to exit
-        int lastDistance = 0;
-        String lastStreet = "";
-        GraphPath<String, IdentifiedWeightedEdge> path =
-                DijkstraShortestPath.findPathBetween(g, orderedPath.get(orderedPath.size()-1), start);
-        for(IdentifiedWeightedEdge e : path.getEdgeList()){
-            lastDistance += g.getEdgeWeight(e);
-            lastStreet = eInfo.get(e.getId()).street;
-        }
-        orderedPath.add(start);
-        orderedPathDistances.add(lastDistance);
-        orderedPathStreets.add(lastStreet);
-
-         */
-        assertNotNull(start);
     }
 
 }

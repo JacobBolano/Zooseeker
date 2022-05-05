@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".plan">
 
+    <TextView
+        android:id="@+id/orderedVisits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        tools:layout_editor_absoluteX="198dp"
+        tools:layout_editor_absoluteY="358dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
