@@ -34,6 +34,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setSearchItem(searchList.get(position));
+        holder.textView.setBackgroundColor(0xFF808080);
 
     }
 
