@@ -56,7 +56,9 @@ public class SearchCapabilitiesTest {
         tester.add("gorilla");
 
         String key = "ape";
-        Set<String> results = myActivity.searchAlgo(key, tester);
+
+        myActivity.setKeySet(tester);
+        Set<String> results = myActivity.searchAlgo(key);
 
         Set<String> expected = new HashSet<>();
         expected.add("great ape");
@@ -75,7 +77,9 @@ public class SearchCapabilitiesTest {
 
         String key = "hawaii";
 
-        Set<String> results = myActivity.searchAlgo(key, tester);
+        myActivity.setKeySet(tester);
+
+        Set<String> results = myActivity.searchAlgo(key);
         assertEquals(results.size(), 0);
 
 
