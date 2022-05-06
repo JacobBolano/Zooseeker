@@ -28,7 +28,6 @@ public class SearchActivity extends AppCompatActivity {
     private SearchListAdapter adapter;
     private Set<String> keySet;
     private List<String> destinationList;
-    private int exhibitCount;
     Map<String, ZooData.VertexInfo> nodeData;
 
     @Override
@@ -38,7 +37,6 @@ public class SearchActivity extends AppCompatActivity {
 
         Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", this);
 
-        this.exhibitCount = 0;
         this.keySet = new HashSet<String>();
         //this.keySet = vInfo.keySet();
 
@@ -61,11 +59,11 @@ public class SearchActivity extends AppCompatActivity {
 
 
     public void setDestinationList(List<String> destinationList){
-        this.destinationList = destinationList;
+        this.destinationList = new ArrayList<>(destinationList);
     }
 
     public void setKeySet(Set<String> keySet){
-        this.keySet = keySet;
+        this.keySet = new HashSet<>(keySet);
     }
 
     public void onSearchClick(View view) {
@@ -100,7 +98,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
         if(updateDestinationList(destination)){
-            exhibitCountView.setText(String.format("%d", this.exhibitCount));
+            exhibitCountView.setText(String.format("%d", this.destinationList.size()));
         }
         view.setBackgroundColor(0xFF73b4cd);
 
@@ -109,7 +107,6 @@ public class SearchActivity extends AppCompatActivity {
     public boolean updateDestinationList(String destination){
         if(! destinationList.contains(destination)){
             destinationList.add(destination);
-            this.exhibitCount++;
             return true;
         }
         return false;
@@ -140,6 +137,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public int getExhibitCount(){
-        return this.exhibitCount;
+        if(destinationList == null){
+            return 0;
+        }
+        return this.destinationList.size();
     }
 }

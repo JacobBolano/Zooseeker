@@ -35,7 +35,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RunWith(AndroidJUnit4.class)
@@ -56,9 +59,45 @@ public class ExhibitNumberTest {
 
     @Test
     public void testIncrementingExhibitCount(){
+        SearchActivity searchActivity = new SearchActivity();
 
+        List<String> testerDestinationList = new ArrayList<>(Arrays.asList("hawaii", "zoo", "Kansas"));
+
+        searchActivity.setDestinationList(testerDestinationList);
+
+        String testDestination = "alaska";
+        searchActivity.updateDestinationList(testDestination);
+
+        assertEquals(searchActivity.getExhibitCount(), testerDestinationList.size() + 1);
     }
 
-    //Test taht exhibit count does not change if duplicate added
 
+    //Test taht exhibit count does not change if duplicate added
+    @Test
+    public void testDuplicateExhibit(){
+        SearchActivity searchActivity = new SearchActivity();
+
+        List<String> testerDestinationList = new ArrayList<>(Arrays.asList("hawaii", "zoo", "Kansas"));
+
+        searchActivity.setDestinationList(testerDestinationList);
+
+        String testDestination = "zoo";
+        searchActivity.updateDestinationList(testDestination);
+
+        assertEquals(searchActivity.getExhibitCount(), testerDestinationList.size());
+    }
+
+    @Test
+    public void testFirstExhibitEntry(){
+        SearchActivity searchActivity = new SearchActivity();
+
+        List<String> testerDestinationList = new ArrayList<>();
+
+        searchActivity.setDestinationList(testerDestinationList);
+
+        String testDestination = "zoo";
+        searchActivity.updateDestinationList(testDestination);
+
+        assertEquals(searchActivity.getExhibitCount(), 1);
+    }
 }
