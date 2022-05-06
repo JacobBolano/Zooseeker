@@ -116,15 +116,20 @@ public class SearchActivity extends AppCompatActivity {
     public Set<String> searchAlgo(String searchText){
 
         Set<String> returnSet = new HashSet<>();
-        searchText = searchText.toLowerCase(Locale.ROOT);
-
-        for(String key : this.keySet){
-            System.out.println(key);
-            if(key.toLowerCase(Locale.ROOT).contains(searchText)){
-                returnSet.add(key);
-            }
+        if(searchText.equals("")) {
+            return returnSet;
         }
-        return returnSet;
+        else {
+            searchText = searchText.toLowerCase(Locale.ROOT);
+
+            for(String key : this.keySet){
+                System.out.println(key);
+                if(key.toLowerCase(Locale.ROOT).contains(searchText)){
+                    returnSet.add(key);
+                }
+            }
+            return returnSet;
+        }
     }
 
     public void onPlanClick(View view) {
