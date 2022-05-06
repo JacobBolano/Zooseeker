@@ -46,7 +46,7 @@ public class SearchCapabilitiesTest {
 
 
     @Test
-    public void clickableButton(){
+    public void SubstringWordTest(){
 
         SearchActivity myActivity = new SearchActivity();
 
@@ -62,12 +62,41 @@ public class SearchCapabilitiesTest {
 
         Set<String> expected = new HashSet<>();
         expected.add("great ape");
-        assertEquals(results, expected );
+        assertEquals(expected, results);
     }
 
+    @Test
+    public void MixedCaseSubstringTest() {
+        SearchActivity myActivity = new SearchActivity();
+        Set<String> tester = new HashSet<>();
+        tester.add("crows");
+        tester.add("Chickens");
+        tester.add("Software Engineers");
+
+        String searchString = "enGIneErS";
+        myActivity.setKeySet(tester);
+        Set<String> results = myActivity.searchAlgo(searchString);
+        HashSet<String> expectedSet = new HashSet<>();
+        expectedSet.add("Software Engineers");
+        assertEquals(expectedSet,expectedSet);
+    }
 
     @Test
-    public void noMatchesSearch(){
+    public void EmptySearchTest() {
+        SearchActivity myActivity = new SearchActivity();
+        Set<String> tester = new HashSet<>();
+        tester.add("monkeys");
+        tester.add("cows");
+        tester.add("giraffes");
+
+        String emptyString = "";
+        myActivity.setKeySet(tester);
+        Set<String> results = myActivity.searchAlgo(emptyString);
+        assertEquals(0, results.size());
+    }
+
+    @Test
+    public void noMatchesSearchTest(){
         SearchActivity myActivity = new SearchActivity();
 
         Set<String> tester = new HashSet<>();
@@ -80,7 +109,7 @@ public class SearchCapabilitiesTest {
         myActivity.setKeySet(tester);
 
         Set<String> results = myActivity.searchAlgo(key);
-        assertEquals(results.size(), 0);
+        assertEquals(0, results.size());
 
 
     }
