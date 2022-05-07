@@ -10,25 +10,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class SearchActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
-
     private SearchListAdapter adapter;
-    private Set<String> keySet;
-    private List<String> destinationList;
-    Map<String, ZooData.VertexInfo> nodeData;
+    private SearchData searchData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +29,8 @@ public class SearchActivity extends AppCompatActivity {
 
         Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", this);
 
-        this.keySet = new HashSet<String>();
-        //this.keySet = vInfo.keySet();
-
-        for(ZooData.VertexInfo vertex : vInfo.values()) {
-            if(vertex.kind.equals(ZooData.VertexInfo.Kind.EXHIBIT)) {
-                this.keySet.add(vertex.name);
-            }
-        }
-        this.destinationList = new ArrayList<>();
-
+        searchData = new SearchData(vInfo);
+        
         adapter = new SearchListAdapter();
         adapter.setHasStableIds(true);
 
@@ -58,34 +42,17 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-    public void setDestinationList(List<String> destinationList){
-        this.destinationList = new ArrayList<>(destinationList);
-    }
-
-    public void setKeySet(Set<String> keySet){
-        this.keySet = new HashSet<>(keySet);
-    }
+    
 
     public void onSearchClick(View view) {
-
-        // TODO set all recycler colors to gray
 
         EditText searchBar = findViewById(R.id.search_bar);
         String searchText = searchBar.getText().toString();
 
-        Set<String> returnSet = searchAlgo(searchText);
-
-        List<String> recyclerList = new ArrayList<>(returnSet);
+        List<String> recyclerList = new ArrayList<>(this.searchData.searchAlgo(searchText));
 
 
         adapter.setSearchListItems(recyclerList);
-        //adapter.notifyDataSetChanged();
-
-
-
-
-
-
     }
 
     public void onItemClick(View view){
@@ -97,54 +64,25 @@ public class SearchActivity extends AppCompatActivity {
         System.out.println(destination);
 
 
-        if(updateDestinationList(destination)){
-            exhibitCountView.setText(String.format("%d", this.destinationList.size()));
+        if(this.searchData.updateDestinationList(destination)){
+            exhibitCountView.setText(String.format("%d", this.searchData.getExhibitCount()));
         }
         view.setBackgroundColor(0xFF73b4cd);
 
     }
 
-    public boolean updateDestinationList(String destination){
-        if(! destinationList.contains(destination)){
-            destinationList.add(destination);
-            return true;
-        }
-        return false;
 
-    }
 
-    public Set<String> searchAlgo(String searchText){
 
-        Set<String> returnSet = new HashSet<>();
-        if(searchText.equals("")) {
-            return returnSet;
-        }
-        else {
-            searchText = searchText.toLowerCase(Locale.ROOT);
-
-            for(String key : this.keySet){
-                System.out.println(key);
-                if(key.toLowerCase(Locale.ROOT).contains(searchText)){
-                    returnSet.add(key);
-                }
-            }
-            return returnSet;
-        }
-    }
 
     public void onPlanClick(View view) {
         Intent intent = new Intent(SearchActivity.this, plan.class);
 
-        intent.putStringArrayListExtra("destinationList", (ArrayList<String>) destinationList);
+        intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.searchData.getDestinationList());
 
-        System.out.println(destinationList);
+        System.out.println(this.searchData.getDestinationList());
         startActivity(intent);
     }
 
-    public int getExhibitCount(){
-        if(destinationList == null){
-            return 0;
-        }
-        return this.destinationList.size();
-    }
+
 }
