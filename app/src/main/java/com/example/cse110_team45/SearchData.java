@@ -1,6 +1,7 @@
 package com.example.cse110_team45;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -10,51 +11,54 @@ import java.util.Set;
 public class SearchData {
 
 
-    private Set<String> exhibitSet;
-    private List<String> destinationList;
+    // Key: Name
+    // Value: ID
+    private Map<String, String> exhibitMap;
+    private List<String> destinationIdList;
 
 
     SearchData(Map<String, ZooData.VertexInfo> vInfo){
-        this.exhibitSet = new HashSet<String>();
+        this.exhibitMap = new HashMap<>();
 
-        for(ZooData.VertexInfo vertex : vInfo.values()) {
-            if(vertex.kind.equals(ZooData.VertexInfo.Kind.EXHIBIT)) {
-                this.exhibitSet.add(vertex.name);
+        for(Map.Entry<String, ZooData.VertexInfo> entry: vInfo.entrySet()) {
+            if(entry.getValue().kind.equals(ZooData.VertexInfo.Kind.EXHIBIT)) {
+                this.exhibitMap.put(entry.getValue().name, entry.getKey());
             }
         }
-        this.destinationList = new ArrayList<>();
+        this.destinationIdList = new ArrayList<>();
     }
 
     SearchData(){}
 
-    public List<String> getDestinationList() {
-        return destinationList;
+    public List<String> getDestinationIdList() {
+        return destinationIdList;
     }
 
-    public Set<String> getExhibitSet() {
-        return exhibitSet;
+    public Map<String, String> getExhibitMap() {
+        return exhibitMap;
     }
 
     public int getExhibitCount(){
-        if(destinationList == null){
+        if(destinationIdList == null){
             return 0;
         }
-        return this.destinationList.size();
+        return this.destinationIdList.size();
     }
 
 
-    public void setDestinationList(List<String> destinationList){
-        this.destinationList = new ArrayList<>(destinationList);
+    public void setDestinationIdList(List<String> destinationIdList){
+        this.destinationIdList = new ArrayList<>(destinationIdList);
     }
 
-    public void setExhibitSet(Set<String> exhibitSet){
-        this.exhibitSet = new HashSet<>(exhibitSet);
+    public void setExhibitMap(Map<String, String> exhibitMap){
+        this.exhibitMap = new HashMap<>(exhibitMap);
     }
 
 
     public boolean updateDestinationList(String destination){
-        if(! destinationList.contains(destination)){
-            destinationList.add(destination);
+        String destination_id = exhibitMap.get(destination);
+        if(! destinationIdList.contains(destination_id)){
+            destinationIdList.add(destination_id);
             return true;
         }
         return false;
@@ -70,10 +74,10 @@ public class SearchData {
         else {
             searchText = searchText.toLowerCase(Locale.ROOT);
 
-            for(String exhibitName : this.exhibitSet){
-                System.out.println(exhibitName);
-                if(exhibitName.toLowerCase(Locale.ROOT).contains(searchText)){
-                    returnSet.add(exhibitName);
+            for(Map.Entry<String, String> exhibitEntry : this.exhibitMap.entrySet()){
+                System.out.println(exhibitEntry);
+                if(exhibitEntry.getKey().toLowerCase(Locale.ROOT).contains(searchText)){
+                    returnSet.add(exhibitEntry.getKey());
                 }
             }
             return returnSet;
