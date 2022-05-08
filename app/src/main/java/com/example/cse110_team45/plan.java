@@ -47,6 +47,7 @@ public class plan extends AppCompatActivity {
         directionDetailsSend();
     }
 
+
     public void directionDetailsSend() {
         Intent intent = new Intent(plan.this, DirectionDetailsActivity.class);
 
