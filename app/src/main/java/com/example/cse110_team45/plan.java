@@ -114,7 +114,7 @@ public class plan extends AppCompatActivity {
         TextView orderedVisitsView = this.findViewById(R.id.orderedVisits);
         orderedVisitsView.setText(orderedPath.get(0));
 
-
     }
+
 
 }
