@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class plan extends AppCompatActivity {
 
-  private planData PlanData;
+  public planData PlanData;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -28,7 +28,6 @@ public class plan extends AppCompatActivity {
         setContentView(R.layout.activity_plan);
         Intent intent = getIntent();
         List<String> visits = intent.getStringArrayListExtra("destinationList");
-        visits.add(start);
 
         // 1. Load the graph...
         Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", this);
@@ -54,5 +53,9 @@ public class plan extends AppCompatActivity {
         intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) this.PlanData.orderedPathExhibitNames);
         intent.putExtra("orderedEdgeList", (Serializable) this.PlanData.orderedPathEdgeList);
         startActivity(intent);
+    }
+
+    public planData getPlanData() {
+        return PlanData;
     }
 }
