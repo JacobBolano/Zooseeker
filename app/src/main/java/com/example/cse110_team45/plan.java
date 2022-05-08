@@ -49,9 +49,15 @@ public class plan extends AppCompatActivity {
         Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", this);
 
         //will be imported from search bar
-        orderedPath = new ArrayList<String>();
-        orderedPathStreets = new ArrayList<String>();
-        orderedPathDistances = new ArrayList<Integer>();
+        orderedPath = new ArrayList<String>(); //send to direction details
+        orderedPathStreets = new ArrayList<String>(); //send to direction details
+        // actual path of graph elements
+        // each graph element
+        // each graph element can get getDetails()
+        // filled where each node has name of exhibit and then the path
+        //
+        orderedPathDistances = new ArrayList<Integer>(); //
+        //
 
         //Pathfinding
         String start = "entrance_exit_gate";
@@ -107,6 +113,8 @@ public class plan extends AppCompatActivity {
         }
         TextView orderedVisitsView = this.findViewById(R.id.orderedVisits);
         orderedVisitsView.setText(orderedPath.get(0));
+
+
     }
 
 }
