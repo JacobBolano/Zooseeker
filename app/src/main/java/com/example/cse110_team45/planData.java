@@ -4,6 +4,11 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,16 +23,28 @@ public class planData {
     Map<String, ZooData.EdgeInfo> eInfo;
     List<String> visits;
 
+    PrintWriter out;
+
     planData(Graph<String, IdentifiedWeightedEdge> g, Map<String, ZooData.VertexInfo> vInfo,
              Map<String, ZooData.EdgeInfo> eInfo, List<String> visits){
         this.g = g;
         this.vInfo = vInfo;
         this.eInfo = eInfo;
         this.visits = visits;
+
+        try
+        {
+            out = new PrintWriter(new BufferedWriter(new FileWriter("task.out")));
+        }
+        catch(IOException e){
+
+        }
+
         orderedPathExhibitNames = new ArrayList<String>(); //send to direction details
         orderedPathStreets = new ArrayList<String>(); //use in route plan screen
         orderedPathEdgeList = new ArrayList<GraphPath>(); //send to direction details
         orderedPathDistances = new ArrayList<Integer>(); //use in route plan screen
+
     }
 
     public void pathFinding(){
@@ -63,6 +80,33 @@ public class planData {
             orderedPathStreets.add(lastStreet);
             visits.remove(dest);
         }
+        int dist = 0;
+        String tempStreet = "";
+        GraphPath<String, IdentifiedWeightedEdge> path3 = DijkstraShortestPath.findPathBetween(g, source, start);
+        for(IdentifiedWeightedEdge e : path3.getEdgeList()){
+            dist += g.getEdgeWeight(e);
+            tempStreet = eInfo.get(e.getId()).street;
+        }
+        orderedPathExhibitNames.add(start);
+        orderedPathDistances.add(dist);
+        orderedPathEdgeList.add(path3);
+        orderedPathStreets.add(tempStreet);
+
+
+
+        for(GraphPath<String, IdentifiedWeightedEdge> path : orderedPathEdgeList) {
+            int i = 1;
+            for (IdentifiedWeightedEdge e : path.getEdgeList()) {
+                out.printf("  %d. Walk %.0f meters along %s from '%s' to '%s'.\n",
+                        i,
+                        g.getEdgeWeight(e),
+                        eInfo.get(e.getId()).street,
+                        vInfo.get(g.getEdgeSource(e).toString()).name,
+                        vInfo.get(g.getEdgeTarget(e).toString()).name);
+                i++;
+            }
+        }
+        out.close();
     }
 
     public void pathComputation() {
@@ -73,3 +117,4 @@ public class planData {
         }
     }
 }
+
