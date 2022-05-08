@@ -38,7 +38,7 @@ public class ExhibitNumberTest {
 
         List<String> testerDestinationList = new ArrayList<>(Arrays.asList("hawaii", "zoo", "Kansas"));
 
-        searchData.setDestinationList(testerDestinationList);
+        searchData.setDestinationIdList(testerDestinationList);
 
         String testDestination = "alaska";
         searchData.updateDestinationList(testDestination);
@@ -54,7 +54,7 @@ public class ExhibitNumberTest {
 
         List<String> testerDestinationList = new ArrayList<>(Arrays.asList("hawaii", "zoo", "Kansas"));
 
-        searchData.setDestinationList(testerDestinationList);
+        searchData.setDestinationIdList(testerDestinationList);
 
         String testDestination = "zoo";
         searchData.updateDestinationList(testDestination);
@@ -68,7 +68,7 @@ public class ExhibitNumberTest {
 
         List<String> testerDestinationList = new ArrayList<>();
 
-        searchData.setDestinationList(testerDestinationList);
+        searchData.setDestinationIdList(testerDestinationList);
 
         String testDestination = "zoo";
         searchData.updateDestinationList(testDestination);

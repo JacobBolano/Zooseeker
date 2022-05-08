@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -78,9 +77,9 @@ public class SearchActivity extends AppCompatActivity {
     public void onPlanClick(View view) {
         Intent intent = new Intent(SearchActivity.this, plan.class);
 
-        intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.searchData.getDestinationList());
+        intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.searchData.getDestinationIdList());
 
-        System.out.println(this.searchData.getDestinationList());
+        System.out.println(this.searchData.getDestinationIdList());
         startActivity(intent);
     }
 
