@@ -41,12 +41,12 @@ public class ZooData {
         public String street;
     }
 
-    public static Map<String, ZooData.VertexInfo> loadVertexInfoJSON(String path, Activity Plan) {
+    public static Map<String, ZooData.VertexInfo> loadVertexInfoJSON(String path, Activity activity) {
         InputStream inputStream;
 
         // On Android, you would use context.getAssets().open(path) here like in Lab 5.
         try {
-            inputStream = Plan.getApplicationContext().getAssets().open(path);
+            inputStream = activity.getApplicationContext().getAssets().open(path);
         }
         catch(IOException e){
             inputStream = null;
@@ -72,12 +72,12 @@ public class ZooData {
         return indexedZooData;
     }
 
-    public static Map<String, ZooData.EdgeInfo> loadEdgeInfoJSON(String path, Activity Plan) {
+    public static Map<String, ZooData.EdgeInfo> loadEdgeInfoJSON(String path, Activity activity) {
         InputStream inputStream;
 
         // On Android, you would use context.getAssets().open(path) here like in Lab 5.
         try {
-            inputStream = Plan.getApplicationContext().getAssets().open(path);
+            inputStream = activity.getApplicationContext().getAssets().open(path);
         }
         catch(IOException e){
             inputStream = null;
@@ -97,7 +97,7 @@ public class ZooData {
         return indexedZooData;
     }
 
-    public static Graph<String, IdentifiedWeightedEdge> loadZooGraphJSON(String path, Activity Plan) {
+    public static Graph<String, IdentifiedWeightedEdge> loadZooGraphJSON(String path, Activity activity) {
         // Create an empty graph to populate.
         Graph<String, IdentifiedWeightedEdge> g = new DefaultUndirectedWeightedGraph<>(IdentifiedWeightedEdge.class);
 
@@ -115,7 +115,7 @@ public class ZooData {
 
         // On Android, you would use context.getAssets().open(path) here like in Lab 5.
         try {
-            inputStream = Plan.getApplicationContext().getAssets().open(path);
+            inputStream = activity.getApplicationContext().getAssets().open(path);
         }
         catch(IOException e){
             inputStream = null;
