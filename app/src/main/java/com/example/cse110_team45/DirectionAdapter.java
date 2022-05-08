@@ -12,9 +12,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class DirectionAdapter extends RecyclerView.Adapter<DirectionAdapter.ViewHolder>{
-    private List<IndividualDirection> individualDirectionList = Collections.emptyList();
+    private List<MockIndividualDirection> individualDirectionList = Collections.emptyList();
 
-    public void setIndividualDirectionListItems(List<IndividualDirection> newDirections) {
+    public void setIndividualDirectionListItems(List<MockIndividualDirection> newDirections) {
         this.individualDirectionList.clear();
         this.individualDirectionList = newDirections;
         notifyDataSetChanged();
@@ -39,16 +39,16 @@ public class DirectionAdapter extends RecyclerView.Adapter<DirectionAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView textView;
-        private IndividualDirection individualDirection;
+        private MockIndividualDirection individualDirection;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.textView = itemView.findViewById(R.id.individualDirectionDetail);
         }
 
-        public IndividualDirection getIndividualDirection(){return individualDirection;}
+        public MockIndividualDirection getIndividualDirection(){return individualDirection;}
 
-        public void setIndividualDirection(IndividualDirection individualDirection){
+        public void setIndividualDirection(MockIndividualDirection individualDirection){
             this.individualDirection = individualDirection;
             this.textView.setText(individualDirection.getDetails());
         }

@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,11 +27,18 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        List<IndividualDirection> testingList = new ArrayList<IndividualDirection>();
-        testingList.add(new IndividualEdge("test street 1", 100));
-        testingList.add(new IndividualNode("test street intersection"));
-        testingList.add(new IndividualEdge("test street 2", 200));
+        List<MockIndividualDirection> testingList = new ArrayList<MockIndividualDirection>();
+        testingList.add(new MockIndividualEdge("test street 1", 100));
+        testingList.add(new MockIndividualNode("test street intersection"));
+        testingList.add(new MockIndividualEdge("test street 2", 200));
         adapter.setIndividualDirectionListItems(testingList);
 
+    }
+
+    public void onNextClicked(View view) {
+        // Call this activity again with shortened version of list (not including current exhibit/path)
+        // TODO: pass shortened list
+        Intent intent = new Intent(this, DirectionDetailsActivity.class);
+        startActivity(intent);
     }
 }

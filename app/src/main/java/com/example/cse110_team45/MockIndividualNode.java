@@ -1,8 +1,8 @@
 package com.example.cse110_team45;
-public class IndividualNode implements IndividualDirection {
+public class MockIndividualNode implements MockIndividualDirection {
     String name;
 
-    public IndividualNode(String name){
+    public MockIndividualNode(String name){
         this.name = name;
     }
 

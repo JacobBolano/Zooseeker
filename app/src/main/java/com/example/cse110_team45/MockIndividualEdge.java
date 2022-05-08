@@ -1,11 +1,11 @@
 package com.example.cse110_team45;
-public class IndividualEdge implements IndividualDirection{
+public class MockIndividualEdge implements MockIndividualDirection{
     String streetName;
     int distance;
 
-    public IndividualEdge(String Name, int dist){
-        streetName=Name;
-        distance=dist;
+    public MockIndividualEdge(String name, int dist){
+        streetName = name;
+        distance = dist;
     }
 
     @Override
