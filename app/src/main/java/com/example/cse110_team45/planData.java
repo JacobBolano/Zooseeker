@@ -29,7 +29,8 @@ public class planData {
         orderedPathStreets = new ArrayList<String>(); //use in route plan screen
         orderedPathEdgeList = new ArrayList<GraphPath>(); //send to direction details
         orderedPathDistances = new ArrayList<Integer>(); //use in route plan screen
-
+        
+        //finds entrance/exit
         for(Map.Entry<String, ZooData.VertexInfo> entry: vInfo.entrySet()) {
             if(entry.getValue().kind.equals(ZooData.VertexInfo.Kind.GATE)) {
                 start = entry.getKey();
@@ -40,10 +41,8 @@ public class planData {
 
     public void pathFinding(){
         //Pathfinding
-
-
         orderedPathExhibitNames.add(start);
-        GraphPath path2 = null;
+        GraphPath testedPath = null;
         String source = start;
         String lastStreet = "";
         while(!visits.isEmpty()) {
@@ -51,41 +50,39 @@ public class planData {
             String dest = null;
             for(int i = 0; i < visits.size(); i++){
                 String goal = visits.get(i);
-                GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, source, goal);
+                GraphPath<String, IdentifiedWeightedEdge> pathBetween = DijkstraShortestPath.findPathBetween(g, source, goal);
                 int pathDist = 0;
                 String tempStreet = "";
-                for(IdentifiedWeightedEdge e : path.getEdgeList()){
+                for(IdentifiedWeightedEdge e : pathBetween.getEdgeList()){
                     pathDist += g.getEdgeWeight(e);
                     tempStreet = eInfo.get(e.getId()).street;
                 }
                 if (pathDist < minDist) {
                     minDist = pathDist;
                     dest = goal;
-                    path2 = path;
+                    testedPath = pathBetween;
                     lastStreet = tempStreet;
                 }
             }
             source = dest;
             orderedPathExhibitNames.add(dest);
             orderedPathDistances.add(minDist);
-            orderedPathEdgeList.add(path2);
+            orderedPathEdgeList.add(testedPath);
             orderedPathStreets.add(lastStreet);
             visits.remove(dest);
         }
+        //path to exit
         int dist = 0;
         String tempStreet = "";
-        GraphPath<String, IdentifiedWeightedEdge> path3 = DijkstraShortestPath.findPathBetween(g, source, start);
-        for(IdentifiedWeightedEdge e : path3.getEdgeList()){
+        GraphPath<String, IdentifiedWeightedEdge> finalPath = DijkstraShortestPath.findPathBetween(g, source, start);
+        for(IdentifiedWeightedEdge e : finalPath.getEdgeList()){
             dist += g.getEdgeWeight(e);
             tempStreet = eInfo.get(e.getId()).street;
         }
         orderedPathExhibitNames.add(start);
         orderedPathDistances.add(dist);
-        orderedPathEdgeList.add(path3);
+        orderedPathEdgeList.add(finalPath);
         orderedPathStreets.add(tempStreet);
-
-
-
 
     }
 
