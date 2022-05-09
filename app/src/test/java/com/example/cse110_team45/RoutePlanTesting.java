@@ -35,7 +35,6 @@ public class RoutePlanTesting {
     static {
         nonEmptyIntent = new Intent(ApplicationProvider.getApplicationContext(), plan.class);
         ArrayList<String> destinationList = new ArrayList<String>();
-
         nonEmptyIntent.putStringArrayListExtra("destinationList", (ArrayList<String>) destinationList);
     }
 
@@ -47,9 +46,7 @@ public class RoutePlanTesting {
 
     }
 
-
-
-    planData PlanData;
+    private planData PlanData;
 
     @Rule
     public ActivityScenarioRule<plan> nonEmptyPlanTestRule = new ActivityScenarioRule<>(nonEmptyIntent);

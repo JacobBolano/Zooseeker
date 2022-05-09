@@ -3,8 +3,6 @@ package com.example.cse110_team45;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,16 +17,12 @@ public class planData {
     Map<String, ZooData.EdgeInfo> eInfo;
     List<String> visits;
 
-
-
     planData(Graph<String, IdentifiedWeightedEdge> g, Map<String, ZooData.VertexInfo> vInfo,
              Map<String, ZooData.EdgeInfo> eInfo, List<String> visits){
         this.g = g;
         this.vInfo = vInfo;
         this.eInfo = eInfo;
         this.visits = visits;
-
-
 
         orderedPathExhibitNames = new ArrayList<String>(); //send to direction details
         orderedPathStreets = new ArrayList<String>(); //use in route plan screen
