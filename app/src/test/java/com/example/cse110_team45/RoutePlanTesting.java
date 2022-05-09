@@ -77,6 +77,9 @@ public class RoutePlanTesting {
             PlanData.pathFinding();
             assertEquals(5, PlanData.orderedPathExhibitNames.size());
             assertEquals("entrance_exit_gate", PlanData.orderedPathExhibitNames.get(0));
+            assertEquals("gators", PlanData.orderedPathExhibitNames.get(1));
+            assertEquals("lions", PlanData.orderedPathExhibitNames.get(2));
+            assertEquals("gorillas", PlanData.orderedPathExhibitNames.get(3));
             assertEquals("entrance_exit_gate", PlanData.orderedPathExhibitNames.get(PlanData.orderedPathExhibitNames.size()-1));
         });
     }

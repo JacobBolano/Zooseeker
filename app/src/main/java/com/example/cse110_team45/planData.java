@@ -16,6 +16,7 @@ public class planData {
     Map<String, ZooData.VertexInfo>vInfo;
     Map<String, ZooData.EdgeInfo> eInfo;
     List<String> visits;
+    String start;
 
     planData(Graph<String, IdentifiedWeightedEdge> g, Map<String, ZooData.VertexInfo> vInfo,
              Map<String, ZooData.EdgeInfo> eInfo, List<String> visits){
@@ -29,11 +30,18 @@ public class planData {
         orderedPathEdgeList = new ArrayList<GraphPath>(); //send to direction details
         orderedPathDistances = new ArrayList<Integer>(); //use in route plan screen
 
+        for(Map.Entry<String, ZooData.VertexInfo> entry: vInfo.entrySet()) {
+            if(entry.getValue().kind.equals(ZooData.VertexInfo.Kind.GATE)) {
+                start = entry.getKey();
+            }
+        }
+
     }
 
     public void pathFinding(){
         //Pathfinding
-        String start = "entrance_exit_gate";
+
+
         orderedPathExhibitNames.add(start);
         GraphPath path2 = null;
         String source = start;
