@@ -56,22 +56,15 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                 System.out.println(g.getEdgeWeight((IdentifiedWeightedEdge) edge));
             }
         }*/
-        System.out.println(prevNode);
         List<MockIndividualEdge> myList = new ArrayList<MockIndividualEdge>();
         List<IdentifiedWeightedEdge> edgePath = orderedEdgeList.get(0).getEdgeList();
         //List<String> nodePath = orderedEdgeList.get(0).getVertexList();
         for (int i = 0; i < edgePath.size(); i++) {
-            System.out.println("target " + vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name);
-            if(prevNode != vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name){
-                myList.add(new MockIndividualEdge(eInfo.get(edgePath.get(i).getId()).street, vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name, g.getEdgeWeight(edgePath.get(i))));
-                System.out.println(prevNode);
-                //prevNode = vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name;
-                //System.out.println(prevNode);
-            } else {
+            String target =  vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name;
+            if(target.equals(prevNode)){
                 myList.add(new MockIndividualEdge(eInfo.get(edgePath.get(i).getId()).street, vInfo.get(g.getEdgeSource(edgePath.get(i)).toString()).name, g.getEdgeWeight(edgePath.get(i))));
-                System.out.println(prevNode);
-                //prevNode = vInfo.get(g.getEdgeSource(edgePath.get(i)).toString()).name;
-                //System.out.println(prevNode);
+            } else {
+                myList.add(new MockIndividualEdge(eInfo.get(edgePath.get(i).getId()).street, vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name, g.getEdgeWeight(edgePath.get(i))));
             }
             if (i == edgePath.size() - 1) {
                 if(prevNode != vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name){
@@ -81,7 +74,6 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                 }
             }
             prevNode = myList.get(i).getNodeTo();
-            System.out.println(prevNode);
         }
         orderedExhibitNames.remove(0);
         orderedEdgeList.remove(0);
@@ -90,19 +82,13 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-
-
-        List<MockIndividualDirection> testingList = new ArrayList<MockIndividualDirection>();
-        //testingList.add(new MockIndividualEdge("test street 1", 100));
-        //testingList.add(new MockIndividualNode("test street intersection"));
-        //testingList.add(new MockIndividualEdge("test street 2", 200));
         adapter.setIndividualDirectionListItems(myList);
 
     }
 
     public void onNextClicked(View view) {
         // Call this activity again with shortened version of list (not including current exhibit/path)
-        // TODO: pass shortened list
+        //  pass shortened list
         Intent intent = new Intent(this, DirectionDetailsActivity.class);
         intent.putExtra("orderedEdgeList", (Serializable) orderedEdgeList);
         intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) orderedExhibitNames);
