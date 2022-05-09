@@ -3,9 +3,6 @@ package com.example.cse110_team45;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.widget.TextView;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,10 +37,6 @@ public class plan extends AppCompatActivity {
         this.PlanData.pathFinding();
         this.PlanData.pathComputation();
 
-        //testing
-        TextView orderedVisitsView = this.findViewById(R.id.orderedVisits);
-        orderedVisitsView.setText(PlanData.orderedPathExhibitNames.get(0));
-        //testing
         directionDetailsSend();
     }
 
@@ -54,9 +47,5 @@ public class plan extends AppCompatActivity {
         intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) this.PlanData.orderedPathExhibitNames);
         intent.putExtra("orderedEdgeList", (Serializable) this.PlanData.orderedPathEdgeList);
         startActivity(intent);
-    }
-
-    public planData getPlanData() {
-        return PlanData;
     }
 }
