@@ -35,7 +35,6 @@ public class RoutePlanTesting {
     static {
         nonEmptyIntent = new Intent(ApplicationProvider.getApplicationContext(), plan.class);
         ArrayList<String> destinationList = new ArrayList<String>();
-
         nonEmptyIntent.putStringArrayListExtra("destinationList", (ArrayList<String>) destinationList);
     }
 
@@ -47,9 +46,7 @@ public class RoutePlanTesting {
 
     }
 
-
-
-    planData PlanData;
+    private planData PlanData;
 
     @Rule
     public ActivityScenarioRule<plan> nonEmptyPlanTestRule = new ActivityScenarioRule<>(nonEmptyIntent);
@@ -80,6 +77,9 @@ public class RoutePlanTesting {
             PlanData.pathFinding();
             assertEquals(5, PlanData.orderedPathExhibitNames.size());
             assertEquals("entrance_exit_gate", PlanData.orderedPathExhibitNames.get(0));
+            assertEquals("gators", PlanData.orderedPathExhibitNames.get(1));
+            assertEquals("lions", PlanData.orderedPathExhibitNames.get(2));
+            assertEquals("gorillas", PlanData.orderedPathExhibitNames.get(3));
             assertEquals("entrance_exit_gate", PlanData.orderedPathExhibitNames.get(PlanData.orderedPathExhibitNames.size()-1));
         });
     }

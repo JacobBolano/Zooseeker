@@ -3,8 +3,6 @@ package com.example.cse110_team45;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +16,7 @@ public class planData {
     Map<String, ZooData.VertexInfo>vInfo;
     Map<String, ZooData.EdgeInfo> eInfo;
     List<String> visits;
-
-
+    String start;
 
     planData(Graph<String, IdentifiedWeightedEdge> g, Map<String, ZooData.VertexInfo> vInfo,
              Map<String, ZooData.EdgeInfo> eInfo, List<String> visits){
@@ -28,18 +25,23 @@ public class planData {
         this.eInfo = eInfo;
         this.visits = visits;
 
-
-
         orderedPathExhibitNames = new ArrayList<String>(); //send to direction details
         orderedPathStreets = new ArrayList<String>(); //use in route plan screen
         orderedPathEdgeList = new ArrayList<GraphPath>(); //send to direction details
         orderedPathDistances = new ArrayList<Integer>(); //use in route plan screen
 
+        for(Map.Entry<String, ZooData.VertexInfo> entry: vInfo.entrySet()) {
+            if(entry.getValue().kind.equals(ZooData.VertexInfo.Kind.GATE)) {
+                start = entry.getKey();
+            }
+        }
+
     }
 
     public void pathFinding(){
         //Pathfinding
-        String start = "entrance_exit_gate";
+
+
         orderedPathExhibitNames.add(start);
         GraphPath path2 = null;
         String source = start;
