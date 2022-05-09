@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Description;
@@ -33,7 +33,7 @@ import org.junit.runner.RunWith;
 public class DirectionDetailsTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> mActivityTestRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
     @Test
     public void arcticFoxesDirectionDetailsTest() {
@@ -68,7 +68,7 @@ public class DirectionDetailsTest {
         materialTextView.perform(click());
 
         ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.button), withText("Plan"),
+                allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -133,7 +133,7 @@ public class DirectionDetailsTest {
         materialTextView2.perform(click());
 
         ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.button), withText("Plan"),
+                allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -211,7 +211,7 @@ public class DirectionDetailsTest {
         materialTextView.perform(click());
 
         ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.button), withText("Plan"),
+                allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -314,7 +314,7 @@ public class DirectionDetailsTest {
         materialTextView4.perform(click());
 
         ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.button), withText("Plan"),
+                allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
