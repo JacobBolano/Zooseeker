@@ -75,7 +75,6 @@ public class SearchData {
             searchText = searchText.toLowerCase(Locale.ROOT);
 
             for(Map.Entry<String, String> exhibitEntry : this.exhibitMap.entrySet()){
-                System.out.println(exhibitEntry);
                 if(exhibitEntry.getKey().toLowerCase(Locale.ROOT).contains(searchText)){
                     returnSet.add(exhibitEntry.getKey());
                 }

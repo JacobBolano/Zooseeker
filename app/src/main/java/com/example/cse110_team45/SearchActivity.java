@@ -60,7 +60,6 @@ public class SearchActivity extends AppCompatActivity {
 
 
         String destination = textView.getText().toString();
-        System.out.println(destination);
 
 
         if(this.searchData.updateDestinationList(destination)){
@@ -79,7 +78,6 @@ public class SearchActivity extends AppCompatActivity {
 
         intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.searchData.getDestinationIdList());
 
-        System.out.println(this.searchData.getDestinationIdList());
         startActivity(intent);
     }
 
