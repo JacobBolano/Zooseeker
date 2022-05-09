@@ -89,10 +89,16 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     public void onNextClicked(View view) {
         // Call this activity again with shortened version of list (not including current exhibit/path)
         //  pass shortened list
-        Intent intent = new Intent(this, DirectionDetailsActivity.class);
-        intent.putExtra("orderedEdgeList", (Serializable) orderedEdgeList);
-        intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) orderedExhibitNames);
-        intent.putExtra("prevNode", prevNode);
-        startActivity(intent);
+        if(orderedEdgeList.size()>0){
+            Intent intent = new Intent(this, DirectionDetailsActivity.class);
+            intent.putExtra("orderedEdgeList", (Serializable) orderedEdgeList);
+            intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) orderedExhibitNames);
+            intent.putExtra("prevNode", prevNode);
+            startActivity(intent);
+        }
+        finish();
+
+
+
     }
 }
