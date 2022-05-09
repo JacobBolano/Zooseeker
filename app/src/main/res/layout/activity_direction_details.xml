@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/directionList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DirectionDetailsActivity">
@@ -22,10 +23,10 @@
         android:id="@+id/directionDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Direction Details"
+        android:text="Exhibit"
         android:textColor="#000000"
-        android:textStyle="bold"
         android:textSize="32sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -33,33 +34,29 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.047" />
 
-    <TextView
-        android:id="@+id/animalTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="animal title goes here"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="@+id/myRectangleView"
-        app:layout_constraintEnd_toEndOf="@+id/myRectangleView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/myRectangleView"
-        app:layout_constraintTop_toTopOf="@+id/myRectangleView"
-        app:layout_constraintVertical_bias="0.013" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/direction_lists"
+        android:layout_width="349dp"
+        android:layout_height="550dp"
+        app:layout_constraintBottom_toBottomOf="@id/myRectangleView"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
+        app:layout_constraintRight_toRightOf="@id/myRectangleView"
+        app:layout_constraintTop_toTopOf="@id/myRectangleView"
+        app:layout_constraintVertical_bias="0.047" />
 
-    <TextView
-        android:id="@+id/detailedDirectionText"
-        android:layout_width="0dp"
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="detailed directions go here"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="@+id/myRectangleView"
-        app:layout_constraintEnd_toEndOf="@+id/myRectangleView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/myRectangleView"
-        app:layout_constraintTop_toTopOf="@+id/myRectangleView"
-        app:layout_constraintVertical_bias="0.109" />
+        android:text="NEXT"
+        android:onClick="onNextClicked"
+        app:layout_constraintBottom_toBottomOf="@id/myRectangleView"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
+        app:layout_constraintRight_toRightOf="@id/myRectangleView"
+        app:layout_constraintTop_toTopOf="@id/myRectangleView"
+        app:layout_constraintVertical_bias="1.1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
