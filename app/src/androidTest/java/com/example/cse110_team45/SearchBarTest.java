@@ -29,29 +29,44 @@ public class SearchBarTest {
     public ActivityScenarioRule<SearchActivity> scenarioRule = new ActivityScenarioRule<>(SearchActivity.class);
 
     @Test
-    public void testTyping(){
+    public void testSearchingandPlanning(){
         ActivityScenario<SearchActivity> scenario = scenarioRule.getScenario();
 
         scenario.moveToState(Lifecycle.State.CREATED);
 
         scenario.onActivity(activity -> {
             EditText searchBar = activity.findViewById(R.id.search_bar);
-            searchBar.setText("gorilla");
+            searchBar.setText("e");
 
             Button searchButton = activity.findViewById(R.id.search_button);
             searchButton.performClick();
 
-
-//            LinearLayoutManager layoutManager = (LinearLayoutManager) activity.recyclerView.getLayoutManager();
-//
-//            int firstVisiblePos = layoutManager.findFirstVisibleItemPosition();
-//            TextView searchItem = (TextView) layoutManager.findViewByPosition(firstVisiblePos);
-//            String searchItemString = searchItem.getText().toString();
-//
-//            System.out.println(searchItemString);
-//            assertEquals("Gorillas", searchItemString);
+            Button planButton = activity.findViewById(R.id.plan_button);
+            planButton.performClick();
 
             assert(true);
+        });
+    }
+
+    @Test
+    public void testInvalidSearch(){
+        ActivityScenario<SearchActivity> scenario = scenarioRule.getScenario();
+
+        scenario.moveToState(Lifecycle.State.CREATED);
+
+        scenario.onActivity(activity -> {
+            EditText searchBar = activity.findViewById(R.id.search_bar);
+            searchBar.setText("churros");
+
+            Button searchButton = activity.findViewById(R.id.search_button);
+            searchButton.performClick();
+
+            int resultCount = activity.recyclerView.getChildCount();
+
+            assertEquals(resultCount, 0);
+
+
+
 
         });
     }
