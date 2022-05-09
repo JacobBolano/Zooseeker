@@ -12,6 +12,7 @@ import android.widget.TextView;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,9 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
     public TextView textView;
+    List<GraphPath> orderedEdgeList;
+    List<String> orderedExhibitNames;
+    String prevNode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +31,10 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_direction_details);
 
         Intent intent = getIntent();
-        List<String> orderedExhibitNames = intent.getStringArrayListExtra("orderedExhibitNames");
-        List<GraphPath> orderedEdgeList = intent.getExtras().getParcelable("orderedEdgeList");
+        orderedExhibitNames = intent.getStringArrayListExtra("orderedExhibitNames");
+        orderedEdgeList = (List<GraphPath>) intent.getSerializableExtra("orderedEdgeList");
+
+        prevNode = intent.getStringExtra("prevNode");
 
         // 1. Load the graph...
         Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", this);
@@ -42,18 +48,55 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         textView = findViewById(R.id.directionDetails);
         textView.setText(orderedExhibitNames.get(0));
 
-        List<MockIndividualEdge> mylist = new ArrayList<MockIndividualEdge>();
+        System.out.println("Direction details: " + orderedEdgeList.size());
 
+        /*for (GraphPath currPath : orderedEdgeList) {
+            System.out.println(currPath.getEdgeList());
+            for (Object edge : currPath.getEdgeList()) {
+                System.out.println(g.getEdgeWeight((IdentifiedWeightedEdge) edge));
+            }
+        }*/
+        System.out.println(prevNode);
+        List<MockIndividualEdge> myList = new ArrayList<MockIndividualEdge>();
+        List<IdentifiedWeightedEdge> edgePath = orderedEdgeList.get(0).getEdgeList();
+        //List<String> nodePath = orderedEdgeList.get(0).getVertexList();
+        for (int i = 0; i < edgePath.size(); i++) {
+            System.out.println("target " + vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name);
+            if(prevNode != vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name){
+                myList.add(new MockIndividualEdge(eInfo.get(edgePath.get(i).getId()).street, vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name, g.getEdgeWeight(edgePath.get(i))));
+                System.out.println(prevNode);
+                //prevNode = vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name;
+                //System.out.println(prevNode);
+            } else {
+                myList.add(new MockIndividualEdge(eInfo.get(edgePath.get(i).getId()).street, vInfo.get(g.getEdgeSource(edgePath.get(i)).toString()).name, g.getEdgeWeight(edgePath.get(i))));
+                System.out.println(prevNode);
+                //prevNode = vInfo.get(g.getEdgeSource(edgePath.get(i)).toString()).name;
+                //System.out.println(prevNode);
+            }
+            if (i == edgePath.size() - 1) {
+                if(prevNode != vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name){
+                    textView.setText(vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name);
+                } else{
+                    textView.setText(vInfo.get(g.getEdgeSource(edgePath.get(i)).toString()).name);
+                }
+            }
+            prevNode = myList.get(i).getNodeTo();
+            System.out.println(prevNode);
+        }
+        orderedExhibitNames.remove(0);
+        orderedEdgeList.remove(0);
 
         recyclerView = findViewById(R.id.direction_lists);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
+
+
         List<MockIndividualDirection> testingList = new ArrayList<MockIndividualDirection>();
         //testingList.add(new MockIndividualEdge("test street 1", 100));
         //testingList.add(new MockIndividualNode("test street intersection"));
         //testingList.add(new MockIndividualEdge("test street 2", 200));
-        //adapter.setIndividualDirectionListItems(testingList);
+        adapter.setIndividualDirectionListItems(myList);
 
     }
 
@@ -61,6 +104,9 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         // Call this activity again with shortened version of list (not including current exhibit/path)
         // TODO: pass shortened list
         Intent intent = new Intent(this, DirectionDetailsActivity.class);
+        intent.putExtra("orderedEdgeList", (Serializable) orderedEdgeList);
+        intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) orderedExhibitNames);
+        intent.putExtra("prevNode", prevNode);
         startActivity(intent);
     }
 }

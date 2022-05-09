@@ -12,9 +12,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class DirectionAdapter extends RecyclerView.Adapter<DirectionAdapter.ViewHolder>{
-    private List<MockIndividualDirection> individualDirectionList = Collections.emptyList();
+    private List<MockIndividualEdge> individualDirectionList = Collections.emptyList();
 
-    public void setIndividualDirectionListItems(List<MockIndividualDirection> newDirections) {
+    public void setIndividualDirectionListItems(List<MockIndividualEdge> newDirections) {
         this.individualDirectionList.clear();
         this.individualDirectionList = newDirections;
         notifyDataSetChanged();
