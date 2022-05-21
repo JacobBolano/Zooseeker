@@ -24,13 +24,9 @@ public class planListItem {
 
     @NonNull
     public String text;
-    public boolean completed;
-    public int order;
 
-    planListItem(@NonNull String text, boolean completed, int order) {
+    planListItem(@NonNull String text) {
         this.text = text;
-        this.completed = completed;
-        this.order = order;
     }
 
     public static List<planListItem> loadJSON(Context context, String path) {
@@ -49,10 +45,7 @@ public class planListItem {
     @Override
     public String toString() {
         return "planListItem{" +
-                "id=" + id +
                 ", text='" + text + '\'' +
-                ", completed=" + completed +
-                ", order=" + order +
                 '}';
     }
 }

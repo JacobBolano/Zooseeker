@@ -16,19 +16,12 @@ import java.util.function.Consumer;
 
 public class planListAdapter extends RecyclerView.Adapter<planListAdapter.ViewHolder> {
 
-    private List<planListItem> planItems = Collections.emptyList();
-    private Consumer<planListItem> onCheckBoxClicked;
-    private BiConsumer<planListItem, String> onTextEditedHandler;
-    private Consumer<planListItem> onDeleteClicked;
+    private List<String> planItems = Collections.emptyList();
 
-    public void setTodoListItems(List<planListItem> newTodoItems) {
+    public void setTodoListItems(List<String> newTodoItems) {
         this.planItems.clear();
         this.planItems = newTodoItems;
         notifyDataSetChanged();
-    }
-
-    public void setOnCheckBoxClickedHandler(Consumer<planListItem> onCheckBoxClicked) {
-        this.onCheckBoxClicked = onCheckBoxClicked;
     }
 
     @NonNull
@@ -43,6 +36,7 @@ public class planListAdapter extends RecyclerView.Adapter<planListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setTodoItem(planItems.get(position));
+        holder.textView.setBackgroundColor(0xFF808080);
     }
 
     @Override
@@ -50,31 +44,20 @@ public class planListAdapter extends RecyclerView.Adapter<planListAdapter.ViewHo
         return planItems.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return planItems.get(position).id;
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
-        private planListItem planItem;
+        private String planItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.textView = itemView.findViewById(R.id.plan_item_text);
-
-            this.textView.setOnFocusChangeListener((view, hasFocus) -> {
-                if (!hasFocus) {
-                    onTextEditedHandler.accept(planItem, textView.getText().toString());
-                }
-            });
         }
 
-        public planListItem getPlanItem() {return planItem;}
+        public String getPlanItem() {return planItem;}
 
-        public void setTodoItem(planListItem todoItem) {
+        public void setTodoItem(String todoItem) {
             this.planItem = todoItem;
-            this.textView.setText(todoItem.text);
+            this.textView.setText(todoItem);
         }
     }
 

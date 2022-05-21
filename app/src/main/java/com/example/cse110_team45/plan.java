@@ -3,8 +3,12 @@ package com.example.cse110_team45;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.jgrapht.Graph;
 
@@ -15,7 +19,9 @@ import java.util.Map;
 
 public class plan extends AppCompatActivity {
 
-  public planData PlanData;
+    public planData PlanData;
+    public RecyclerView recyclerView;
+    private planListAdapter adapter;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -36,12 +42,23 @@ public class plan extends AppCompatActivity {
         PlanData = new planData(g, vInfo, eInfo, visits);
         this.PlanData.pathFinding();
         this.PlanData.pathComputation();
+        this.PlanData.orderedPathWithComp();
 
-        directionDetailsSend();
+        adapter = new planListAdapter();
+        adapter.setHasStableIds(true);
+
+        recyclerView = findViewById(R.id.orderedVisits);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        List<String> recyclerList = this.PlanData.orderedPathNamesAndDist;
+
+        adapter.setTodoListItems(recyclerList);
+
     }
 
 
-    public void directionDetailsSend() {
+    public void directionDetailsSend(View view) {
         Intent intent = new Intent(plan.this, DirectionDetailsActivity.class);
 
         intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) this.PlanData.orderedPathExhibitNames);

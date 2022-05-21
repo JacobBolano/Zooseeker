@@ -1,5 +1,7 @@
 package com.example.cse110_team45;
 
+import android.util.Log;
+
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -11,7 +13,9 @@ public class planData {
     List<String> orderedPathExhibitNames;
     List<String> orderedPathStreets;
     List<GraphPath> orderedPathEdgeList;
+    List<String> orderedPathNamesAndDist;
     List<Integer> orderedPathDistances;
+    List<Integer> totalRoutePaths;
     Graph<String, IdentifiedWeightedEdge> g;
     Map<String, ZooData.VertexInfo>vInfo;
     Map<String, ZooData.EdgeInfo> eInfo;
@@ -29,7 +33,10 @@ public class planData {
         orderedPathStreets = new ArrayList<String>(); //use in route plan screen
         orderedPathEdgeList = new ArrayList<GraphPath>(); //send to direction details
         orderedPathDistances = new ArrayList<Integer>(); //use in route plan screen
-        
+        totalRoutePaths = new ArrayList<Integer>();
+        orderedPathNamesAndDist = new ArrayList<String>();
+
+
         //finds entrance/exit
         for(Map.Entry<String, ZooData.VertexInfo> entry: vInfo.entrySet()) {
             if(entry.getValue().kind.equals(ZooData.VertexInfo.Kind.GATE)) {
@@ -87,10 +94,25 @@ public class planData {
     }
 
     public void pathComputation() {
-        List<Integer> totalRoutePaths = new ArrayList<>();
         totalRoutePaths.add(orderedPathDistances.get(0));
         for(int i = 1; i < orderedPathDistances.size(); i++){
-            totalRoutePaths.add(i, totalRoutePaths.get(i-1) + orderedPathDistances.get(i));
+            totalRoutePaths.add(totalRoutePaths.get(i-1) + orderedPathDistances.get(i));
+        }
+    }
+
+    public void orderedPathWithComp() {
+        Log.d("dist", orderedPathDistances.toString());
+        Log.d("exhibit names", orderedPathExhibitNames.toString());
+        Log.d("street names", orderedPathStreets.toString());
+
+        for (int i = 1; i < orderedPathExhibitNames.size(); i++) {
+            orderedPathNamesAndDist.add(
+                    vInfo.get(orderedPathExhibitNames.get(i)).name);
+        }
+        for (int i = 0; i < orderedPathNamesAndDist.size(); i++) {
+            orderedPathNamesAndDist.set(i, orderedPathNamesAndDist.get(i) + ", "
+                    + orderedPathStreets.get(i) + ", "
+                    + totalRoutePaths.get(i).toString() + " ft");
         }
     }
 }
