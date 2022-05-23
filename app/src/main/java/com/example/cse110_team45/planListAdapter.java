@@ -24,6 +24,10 @@ public class planListAdapter extends RecyclerView.Adapter<planListAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public List<String> getPlanItems(){
+        return planItems;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
