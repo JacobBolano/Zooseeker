@@ -14,15 +14,18 @@ public class SearchData {
     // Key: Name
     // Value: ID
     private Map<String, String> exhibitMap;
+    private Map<String, List<String>> tagMap;
     private List<String> destinationIdList;
 
 
     SearchData(Map<String, ZooData.VertexInfo> vInfo){
         this.exhibitMap = new HashMap<>();
+        this.tagMap = new HashMap<>();
 
         for(Map.Entry<String, ZooData.VertexInfo> entry: vInfo.entrySet()) {
             if(entry.getValue().kind.equals(ZooData.VertexInfo.Kind.EXHIBIT)) {
                 this.exhibitMap.put(entry.getValue().name, entry.getKey());
+                this.tagMap.put(entry.getValue().name, entry.getValue().tags);
             }
         }
         this.destinationIdList = new ArrayList<>();
@@ -50,8 +53,9 @@ public class SearchData {
         this.destinationIdList = new ArrayList<>(destinationIdList);
     }
 
-    public void setExhibitMap(Map<String, String> exhibitMap){
+    public void setSearchMaps(Map<String, String> exhibitMap, Map<String, List<String>> tagMap){
         this.exhibitMap = new HashMap<>(exhibitMap);
+        this.tagMap = new HashMap<>(tagMap);
     }
 
 
@@ -77,6 +81,13 @@ public class SearchData {
             for(Map.Entry<String, String> exhibitEntry : this.exhibitMap.entrySet()){
                 if(exhibitEntry.getKey().toLowerCase(Locale.ROOT).contains(searchText)){
                     returnSet.add(exhibitEntry.getKey());
+                }
+            }
+            for(Map.Entry<String, List<String>> tagEntry: this.tagMap.entrySet()){
+                for(String tag : tagEntry.getValue()){
+                    if(tag.toLowerCase(Locale.ROOT).equals(searchText)){
+                        returnSet.add(tagEntry.getKey());
+                    }
                 }
             }
             return returnSet;

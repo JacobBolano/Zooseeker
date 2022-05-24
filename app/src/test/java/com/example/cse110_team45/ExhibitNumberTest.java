@@ -43,7 +43,12 @@ public class ExhibitNumberTest {
         Map<String, String> testExhibitMap = new HashMap<>();
         testExhibitMap.put("alaska", "alaska_id");
 
-        searchData.setExhibitMap(testExhibitMap);
+        List<String> emptyTags = new ArrayList<>();
+
+        Map<String, List<String>> testTags = new HashMap<>();
+        testTags.put("alaska", emptyTags);
+
+        searchData.setSearchMaps(testExhibitMap, testTags);
         searchData.setDestinationIdList(testerDestinationList);
 
         String testDestination = "alaska";
@@ -63,7 +68,14 @@ public class ExhibitNumberTest {
         Map<String, String> testExhibitMap = new HashMap<>();
         testExhibitMap.put("zoo", "zoo_id");
 
-        searchData.setExhibitMap(testExhibitMap);
+        List<String> emptyTags = new ArrayList<>();
+
+        Map<String, List<String>> testTags = new HashMap<>();
+        testTags.put("zoo", emptyTags);
+
+
+        searchData.setSearchMaps(testExhibitMap, testTags);
+
 
         searchData.setDestinationIdList(testerDestinationList);
 
@@ -81,7 +93,12 @@ public class ExhibitNumberTest {
         Map<String, String> testExhibitMap = new HashMap<>();
         testExhibitMap.put("zoo", "zoo_id");
 
-        searchData.setExhibitMap(testExhibitMap);
+        List<String> emptyTags = new ArrayList<>();
+
+        Map<String, List<String>> testTags = new HashMap<>();
+        testTags.put("zoo", emptyTags);
+
+        searchData.setSearchMaps(testExhibitMap, testTags);
         searchData.setDestinationIdList(testerDestinationList);
 
         String testDestination = "zoo";
