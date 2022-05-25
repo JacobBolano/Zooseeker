@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -33,6 +34,9 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         orderedExhibitNames = intent.getStringArrayListExtra("orderedExhibitNames");
         orderedEdgeList = (List<GraphPath>) intent.getSerializableExtra("orderedEdgeList");
+
+        Log.d("Ordered Exhibits", orderedExhibitNames.toString());
+        Log.d("Edge List", orderedEdgeList.toString());
 
         prevNode = intent.getStringExtra("prevNode");
 
@@ -98,6 +102,13 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         }
         finish();
 
+
+
+    }
+
+    public void onPreviousClicked(View view) {
+        System.out.println(prevNode);
+        System.out.println(orderedEdgeList);
 
 
     }
