@@ -28,7 +28,18 @@ public class DirectionData {
     public DirectionData(List<GraphPath> orderedEdgeList, List<String> orderedExhibitNames) {
         this.orderedEdgeList = orderedEdgeList;
         this.orderedExhibitNames = orderedExhibitNames;
+    }
 
+    public void setOrderedEdgeList(List<GraphPath> orderedEdgeList) {
+        this.orderedEdgeList = orderedEdgeList;
+    }
+
+    public void setOrderedExhibitNames(List<String> orderedExhibitNames) {
+        this.orderedExhibitNames = orderedExhibitNames;
+    }
+
+    public void setCurrentExhibitIndex(int currentExhibitIndex) {
+        this.currentExhibitIndex = currentExhibitIndex;
     }
 
     public void addGraphs(Graph<String, IdentifiedWeightedEdge> g,

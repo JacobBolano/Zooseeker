@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">CSE110_team45</string>
     <string name="search_text">Search</string>
+    <string name="restore_plan">Restore Plan</string>
+    <string name="app_title">ZooSeeker</string>
+    <string name="restore_or_restart">Restore current plan or start from scratch?</string>
+    <string name="new_plan">New Plan</string>
 </resources>
