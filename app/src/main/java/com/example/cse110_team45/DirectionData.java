@@ -1,5 +1,7 @@
 package com.example.cse110_team45;
 
+import android.util.Log;
+
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
@@ -39,6 +41,7 @@ public class DirectionData {
     public List<MockIndividualEdge> getCurrentExhibitDirections(){
         List<MockIndividualEdge> detailEdgeList = new ArrayList<MockIndividualEdge>();
         List<IdentifiedWeightedEdge> edgePath = orderedEdgeList.get(currentExhibitIndex).getEdgeList();
+        Log.d("Which Exhibit", orderedExhibitNames.get(currentExhibitIndex + 1));
 
         for (int i = 0; i < edgePath.size(); i++) {
             String target =  vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name;
@@ -62,6 +65,7 @@ public class DirectionData {
     }
 
     public String getTitleText(){
+        titleText =vInfo.get(orderedExhibitNames.get(currentExhibitIndex)).name;
         return titleText;
     }
 
