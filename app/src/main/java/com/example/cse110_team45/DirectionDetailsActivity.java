@@ -13,8 +13,6 @@ import android.widget.TextView;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,11 +40,11 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         Log.d("Edge List", directionData.orderedEdgeList.toString());
 
         // 1. Load the graph...
-        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", this);
+        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("zoo_graph.json", this);
 
         // 2. Load the information about our nodes and edges...
-        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", this);
-        Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", this);
+        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("exhibit_info.json", this);
+        Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("trail_info.json", this);
 
         directionData.addGraphs(g, vInfo, eInfo);
 

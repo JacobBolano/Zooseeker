@@ -33,11 +33,11 @@ public class plan extends AppCompatActivity {
         List<String> visits = intent.getStringArrayListExtra("destinationList");
 
         // 1. Load the graph...
-        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", this);
+        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("zoo_graph.json", this);
 
         // 2. Load the information about our nodes and edges...
-        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", this);
-        Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", this);
+        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("exhibit_info.json", this);
+        Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("trail_info.json", this);
 
         PlanData = new planData(g, vInfo, eInfo, visits);
         this.PlanData.pathFinding();

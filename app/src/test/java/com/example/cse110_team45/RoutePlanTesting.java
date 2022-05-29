@@ -5,24 +5,18 @@ import static org.junit.Assert.assertNotNull;
 
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.Lifecycle;
-import androidx.room.Index;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.jgrapht.Graph;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.List;

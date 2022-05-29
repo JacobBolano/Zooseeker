@@ -39,6 +39,9 @@ public class planData {
 
         //finds entrance/exit
         for(Map.Entry<String, ZooData.VertexInfo> entry: vInfo.entrySet()) {
+            if(entry.getValue().kind == null){
+                continue;
+            }
             if(entry.getValue().kind.equals(ZooData.VertexInfo.Kind.GATE)) {
                 start = entry.getKey();
             }
