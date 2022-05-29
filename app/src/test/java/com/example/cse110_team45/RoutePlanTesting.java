@@ -25,6 +25,11 @@ import java.util.Map;
 
 @RunWith(AndroidJUnit4.class)
 public class RoutePlanTesting {
+
+    String zooGraph = "zoo_graph.json";
+    String vertexData = "exhibit_info.json";
+    String edgeData = "trail_info.json";
+
     static Intent nonEmptyIntent;
     static {
         nonEmptyIntent = new Intent(ApplicationProvider.getApplicationContext(), plan.class);
