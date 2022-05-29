@@ -1,5 +1,7 @@
 package com.example.cse110_team45;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,6 +25,19 @@ public class SearchData {
         this.tagMap = new HashMap<>();
 
         for(Map.Entry<String, ZooData.VertexInfo> entry: vInfo.entrySet()) {
+
+            if (entry.getKey().equals("fern_canyon")){
+                ZooData.VertexInfo value = entry.getValue();
+                Log.d("kind", value.kind.toString());
+                System.out.println(value.group_id);
+                Log.d("name", value.name);
+                Log.d("tags", value.tags.toString());
+                Log.d("lat", Float.toString(value.lat));
+                Log.d("lng", Float.toString(value.lng));
+            }
+            if(entry.getValue().kind == null){
+                continue;
+            }
             if(entry.getValue().kind.equals(ZooData.VertexInfo.Kind.EXHIBIT)) {
                 this.exhibitMap.put(entry.getValue().name, entry.getKey());
                 this.tagMap.put(entry.getValue().name, entry.getValue().tags);
@@ -34,6 +49,7 @@ public class SearchData {
     SearchData(){}
 
     public List<String> getDestinationIdList() {
+        System.out.println(destinationIdList);
         return destinationIdList;
     }
 
@@ -60,7 +76,9 @@ public class SearchData {
 
 
     public boolean updateDestinationList(String destination){
+
         String destination_id = exhibitMap.get(destination);
+        Log.d("destination_id",destination_id);
         if(! destinationIdList.contains(destination_id)){
             destinationIdList.add(destination_id);
             return true;

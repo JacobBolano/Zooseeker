@@ -33,9 +33,9 @@ public class RoutePlanSummaryTest {
     static {
         nonEmptyIntent = new Intent(ApplicationProvider.getApplicationContext(), plan.class);
         ArrayList<String> destinationList = new ArrayList<String>();
-        destinationList.add("gorillas");
-        destinationList.add("lions");
-        destinationList.add("gators");
+        destinationList.add("gorilla");
+        destinationList.add("motmot");
+        destinationList.add("fern_canyon");
         nonEmptyIntent.putStringArrayListExtra("destinationList", (ArrayList<String>) destinationList);
     }
 

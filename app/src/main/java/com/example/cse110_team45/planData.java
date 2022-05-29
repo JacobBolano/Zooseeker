@@ -39,6 +39,9 @@ public class planData {
 
         //finds entrance/exit
         for(Map.Entry<String, ZooData.VertexInfo> entry: vInfo.entrySet()) {
+            if(entry.getValue().kind == null){
+                continue;
+            }
             if(entry.getValue().kind.equals(ZooData.VertexInfo.Kind.GATE)) {
                 start = entry.getKey();
             }
@@ -55,8 +58,18 @@ public class planData {
         while(!visits.isEmpty()) {
             int minDist = Integer.MAX_VALUE;
             String dest = null;
+            String destAnimal = null;
             for(int i = 0; i < visits.size(); i++){
-                String goal = visits.get(i);
+                String id_string = visits.get(i);
+                Log.d("Id_string", id_string);
+                String groupString = vInfo.get(id_string).group_id;
+                String goal = id_string;
+                if(groupString != null){
+//                    Log.d("Old ID", id_string);
+                    goal = groupString;
+//                    Log.d("Group Fix", id_string);
+                }
+
                 GraphPath<String, IdentifiedWeightedEdge> pathBetween = DijkstraShortestPath.findPathBetween(g, source, goal);
                 int pathDist = 0;
                 String tempStreet = "";
@@ -66,17 +79,18 @@ public class planData {
                 }
                 if (pathDist < minDist) {
                     minDist = pathDist;
+                    destAnimal = id_string;
                     dest = goal;
                     testedPath = pathBetween;
                     lastStreet = tempStreet;
                 }
             }
             source = dest;
-            orderedPathExhibitNames.add(dest);
+            orderedPathExhibitNames.add(destAnimal);
             orderedPathDistances.add(minDist);
             orderedPathEdgeList.add(testedPath);
             orderedPathStreets.add(lastStreet);
-            visits.remove(dest);
+            visits.remove(destAnimal);
         }
         //path to exit
         int dist = 0;
