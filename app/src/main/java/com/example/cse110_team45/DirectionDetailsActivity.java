@@ -79,7 +79,8 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
     public void onPreviousClicked(View view) {
         Log.d("Previous Clicked!", "True");
-
+        adapter.setIndividualDirectionListItems(directionData.getPreviousDirections());
+        textView.setText(directionData.getTitleText());
 
     }
 }
