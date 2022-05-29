@@ -6,8 +6,10 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 public class DirectionData {
 
@@ -67,6 +69,50 @@ public class DirectionData {
     public String getTitleText(){
         titleText =vInfo.get(orderedExhibitNames.get(currentExhibitIndex)).name;
         return titleText;
+    }
+
+    public ZooData.VertexInfo getCurrentExhibit(){
+        return vInfo.get(orderedExhibitNames.get(currentExhibitIndex));
+    }
+
+
+    public List<MockIndividualEdge> getPreviousDirections(){
+        currentExhibitIndex--;
+
+        //FIXME what if group_id ??
+
+        ZooData.VertexInfo currentExhibit = getCurrentExhibit();
+        String exhibitDestinationName;
+
+        if(currentExhibit.group_id !=null){
+            exhibitDestinationName = vInfo.get(currentExhibit.group_id).name;
+        }
+        else{
+            exhibitDestinationName = currentExhibit.name;
+        }
+
+
+        prevNode = exhibitDestinationName;
+
+        List<MockIndividualEdge> detailEdgeList = getCurrentExhibitDirections();
+
+        List<MockIndividualEdge> reverseEdgeList = new ArrayList<>();
+
+
+
+        String nodeTo = exhibitDestinationName;
+
+        for(MockIndividualEdge edge : detailEdgeList){
+            reverseEdgeList.add(new MockIndividualEdge(edge.streetName, nodeTo, edge.distance));
+            nodeTo = edge.nodeTo;
+            Log.d("New nodeTo", nodeTo);
+        }
+
+        currentExhibitIndex--;
+        prevNode = exhibitDestinationName;
+
+        Collections.reverse(reverseEdgeList);
+        return reverseEdgeList;
     }
 
 

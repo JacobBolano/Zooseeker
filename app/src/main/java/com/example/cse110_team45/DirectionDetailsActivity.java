@@ -32,6 +32,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+
         directionData = new DirectionData((List<GraphPath>) intent.getSerializableExtra("orderedEdgeList"),
                 intent.getStringArrayListExtra("orderedExhibitNames"));
 
@@ -73,6 +74,13 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         else{
             finish();
         }
+
+    }
+
+    public void onPreviousClicked(View view) {
+        Log.d("Previous Clicked!", "True");
+        adapter.setIndividualDirectionListItems(directionData.getPreviousDirections());
+        textView.setText(directionData.getTitleText());
 
     }
 }
