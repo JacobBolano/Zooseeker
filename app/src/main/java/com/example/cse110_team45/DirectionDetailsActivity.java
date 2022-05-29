@@ -66,6 +66,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         if(directionData.currentExhibitIndex < directionData.orderedEdgeList.size()){
 
+            Log.d("Next", "Here");
             adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
             textView.setText(directionData.getTitleText());
         }

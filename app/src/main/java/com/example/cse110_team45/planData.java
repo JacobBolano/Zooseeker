@@ -58,8 +58,17 @@ public class planData {
         while(!visits.isEmpty()) {
             int minDist = Integer.MAX_VALUE;
             String dest = null;
+            String id_string = null;
             for(int i = 0; i < visits.size(); i++){
-                String goal = visits.get(i);
+                id_string = visits.get(i);
+                String groupString = vInfo.get(id_string).group_id;
+                String goal = id_string;
+                if(groupString != null){
+                    Log.d("Old ID", id_string);
+                    goal = groupString;
+                    Log.d("Group Fix", id_string);
+                }
+
                 GraphPath<String, IdentifiedWeightedEdge> pathBetween = DijkstraShortestPath.findPathBetween(g, source, goal);
                 int pathDist = 0;
                 String tempStreet = "";
@@ -75,11 +84,11 @@ public class planData {
                 }
             }
             source = dest;
-            orderedPathExhibitNames.add(dest);
+            orderedPathExhibitNames.add(id_string);
             orderedPathDistances.add(minDist);
             orderedPathEdgeList.add(testedPath);
             orderedPathStreets.add(lastStreet);
-            visits.remove(dest);
+            visits.remove(id_string);
         }
         //path to exit
         int dist = 0;

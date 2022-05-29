@@ -49,6 +49,7 @@ public class SearchData {
     SearchData(){}
 
     public List<String> getDestinationIdList() {
+        System.out.println(destinationIdList);
         return destinationIdList;
     }
 
@@ -75,7 +76,9 @@ public class SearchData {
 
 
     public boolean updateDestinationList(String destination){
+
         String destination_id = exhibitMap.get(destination);
+        Log.d("destination_id",destination_id);
         if(! destinationIdList.contains(destination_id)){
             destinationIdList.add(destination_id);
             return true;
