@@ -57,8 +57,8 @@ public class RestoreQueryActivity extends AppCompatActivity {
                 break;
             case "PLAN":
                 intent = new Intent(this, plan.class);
-                ArrayList<String> visits = gson.fromJson(prefs.getString("visitsJSON", ""), arrayListStringType);
-                intent.putStringArrayListExtra("visits", visits);
+                ArrayList<String> destinationList = gson.fromJson(prefs.getString("destinationListJSON", ""), arrayListStringType);
+                intent.putStringArrayListExtra("destinationList", destinationList);
                 break;
             case "DIRECTIONS":
                 intent = new Intent(this, DirectionDetailsActivity.class);

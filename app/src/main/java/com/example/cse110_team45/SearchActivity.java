@@ -57,7 +57,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onPause() {
         // put a new scenario here for debug
         super.onPause();
-        Log.i("test", "onDestroy is called");
+        Log.i("test", "onPause is called");
         //SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = prefs.edit();

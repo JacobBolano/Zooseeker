@@ -20,6 +20,7 @@ public class planData {
     Map<String, ZooData.VertexInfo>vInfo;
     Map<String, ZooData.EdgeInfo> eInfo;
     List<String> visits;
+    List<String> destinationList; // MM: save destinations without entrance gate for store/restore
     String start;
 
     planData(Graph<String, IdentifiedWeightedEdge> g, Map<String, ZooData.VertexInfo> vInfo,
@@ -35,6 +36,7 @@ public class planData {
         orderedPathDistances = new ArrayList<Integer>(); //use in route plan screen
         totalRoutePaths = new ArrayList<Integer>();
         orderedPathNamesAndDist = new ArrayList<String>();
+        destinationList = new ArrayList<String>(visits); // MM store destination list
 
 
         //finds entrance/exit
