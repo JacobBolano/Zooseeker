@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -113,6 +114,42 @@ public class DirectionData {
 
         Collections.reverse(reverseEdgeList);
         return reverseEdgeList;
+    }
+
+
+    public List<MockIndividualEdge> skipExhibit(){
+        Log.d("Skipping This Exhibit", orderedExhibitNames.get(currentExhibitIndex));
+        orderedEdgeList.remove(currentExhibitIndex - 1);
+        orderedExhibitNames.remove(currentExhibitIndex);
+
+        currentExhibitIndex--;
+        ZooData.VertexInfo sourceNode = getCurrentExhibit();
+        String source;
+        if(sourceNode.group_id != null){
+            source = sourceNode.group_id;
+        }
+        else {
+            source = sourceNode.id;
+        }
+        Log.d("Source", source);
+
+        currentExhibitIndex++;
+        ZooData.VertexInfo goalNode = getCurrentExhibit();
+        String goal;
+        if(goalNode.group_id != null){
+            goal = goalNode.group_id;
+        }
+        else{
+            goal = goalNode.id;
+        }
+        Log.d("Goal", goal);
+        currentExhibitIndex--;
+
+        GraphPath<String, IdentifiedWeightedEdge> pathBetween = DijkstraShortestPath.findPathBetween(g, source, goal);
+        orderedEdgeList.set(currentExhibitIndex, pathBetween);
+        System.out.println(orderedEdgeList);
+
+        return getCurrentExhibitDirections();
     }
 
 

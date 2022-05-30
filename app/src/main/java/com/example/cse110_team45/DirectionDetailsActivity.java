@@ -83,4 +83,17 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         textView.setText(directionData.getTitleText());
 
     }
+
+    public void onSkipClick(View view) {
+        if(directionData.currentExhibitIndex < directionData.orderedEdgeList.size() && directionData.currentExhibitIndex > 0){
+            adapter.setIndividualDirectionListItems(directionData.skipExhibit());
+            textView.setText(directionData.getTitleText());
+        }
+        else {
+            finish();
+        }
+
+
+
+    }
 }
