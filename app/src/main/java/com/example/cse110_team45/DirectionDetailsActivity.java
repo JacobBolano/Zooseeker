@@ -32,8 +32,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        directionData = new DirectionData((List<GraphPath>) intent.getSerializableExtra("orderedEdgeList"),
-                intent.getStringArrayListExtra("orderedExhibitNames"));
+        directionData = new DirectionData((List<GraphPath>) intent.getSerializableExtra("orderedEdgeList"), intent.getStringArrayListExtra("orderedExhibitNames"));
 
         //directionData.setCurrentExhibitIndex(intent.getIntExtra("currentExhibitIndex"));
 
