@@ -18,10 +18,11 @@ public class SearchData {
     private Map<String, String> exhibitMap;
     private Map<String, List<String>> tagMap;
     private List<String> destinationIdList;
-    private List<String> selectedExhibits;
+    private Map<String, ZooData.VertexInfo> vInfo;
 
 
     SearchData(Map<String, ZooData.VertexInfo> vInfo){
+        this.vInfo = vInfo;
         this.exhibitMap = new HashMap<>();
         this.tagMap = new HashMap<>();
 
@@ -45,7 +46,6 @@ public class SearchData {
             }
         }
         this.destinationIdList = new ArrayList<>();
-        this.selectedExhibits = new ArrayList<>();
     }
 
     SearchData(){}
@@ -55,6 +55,10 @@ public class SearchData {
         return destinationIdList;
     }
     public List<String> getSelectedExhibits(){
+        List<String> selectedExhibits = new ArrayList<>();
+        for(String id: destinationIdList){
+            selectedExhibits.add(vInfo.get(id).name);
+        }
         return selectedExhibits;
     }
 
@@ -86,7 +90,6 @@ public class SearchData {
         Log.d("destination_id",destination_id);
         if(! destinationIdList.contains(destination_id)){
             destinationIdList.add(destination_id);
-            selectedExhibits.add(destination);
             return true;
         }
         return false;
