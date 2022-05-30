@@ -83,4 +83,9 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         textView.setText(directionData.getTitleText());
 
     }
+
+    public void onSettingsClicked(View view) {
+        Intent intent = new Intent(DirectionDetailsActivity.this, SettingsActivity.class);
+        startActivity(intent);
+    }
 }

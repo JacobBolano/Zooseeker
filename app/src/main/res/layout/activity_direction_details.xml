@@ -63,7 +63,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Previous"
-
         android:onClick="onPreviousClicked"
         tools:layout_editor_absoluteX="32dp"
         tools:layout_editor_absoluteY="646dp"
@@ -75,6 +74,19 @@
         app:layout_constraintVertical_bias="0.047"
 
         />
+
+    <ImageButton
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#6200EE"
+        android:onClick="onSettingsClicked"
+        app:layout_constraintBottom_toTopOf="@id/myRectangleView"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
+        app:layout_constraintRight_toRightOf="@id/myRectangleView"
+        app:srcCompat="@android:drawable/ic_menu_preferences" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

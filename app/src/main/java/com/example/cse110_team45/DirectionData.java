@@ -17,6 +17,8 @@ public class DirectionData {
     List<String> orderedExhibitNames;
     String prevNode;
 
+    boolean directionFormat;
+
     Graph<String, IdentifiedWeightedEdge> g;
     Map<String, ZooData.VertexInfo> vInfo;
     Map<String, ZooData.EdgeInfo> eInfo;
@@ -28,6 +30,7 @@ public class DirectionData {
     public DirectionData(List<GraphPath> orderedEdgeList, List<String> orderedExhibitNames) {
         this.orderedEdgeList = orderedEdgeList;
         this.orderedExhibitNames = orderedExhibitNames;
+        this.directionFormat = false;
 
     }
 
@@ -40,7 +43,7 @@ public class DirectionData {
 
     }
 
-    public List<MockIndividualEdge> getCurrentExhibitDirections(){
+    public List<MockIndividualEdge> getCurrentExhibitDirections() {
         List<MockIndividualEdge> detailEdgeList = new ArrayList<MockIndividualEdge>();
         List<IdentifiedWeightedEdge> edgePath = orderedEdgeList.get(currentExhibitIndex).getEdgeList();
         Log.d("Which Exhibit", orderedExhibitNames.get(currentExhibitIndex + 1));
