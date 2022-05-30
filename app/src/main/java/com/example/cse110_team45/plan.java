@@ -1,14 +1,18 @@
 package com.example.cse110_team45;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import org.jgrapht.Graph;
 
@@ -57,12 +61,27 @@ public class plan extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("lastActivity", "PLAN");
+        Gson gson = new Gson();
+        String destinationListJSON = gson.toJson(PlanData.destinationList);
+        editor.putString("destinationListJSON",destinationListJSON);
+        editor.apply();
+    }
 
     public void directionDetailsSend(View view) {
         Intent intent = new Intent(plan.this, DirectionDetailsActivity.class);
 
         intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) this.PlanData.orderedPathExhibitNames);
         intent.putExtra("orderedEdgeList", (Serializable) this.PlanData.orderedPathEdgeList);
+        // MM for compatibility with store/restore
+        intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.PlanData.destinationList);
+        // MM for compatibility with store/restore
+        intent.putExtra("currentExhibitIndex",0);
         startActivity(intent);
     }
 }

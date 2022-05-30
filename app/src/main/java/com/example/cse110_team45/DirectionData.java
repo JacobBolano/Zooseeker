@@ -16,6 +16,9 @@ public class DirectionData {
 
     List<GraphPath> orderedEdgeList;
     List<String> orderedExhibitNames;
+
+
+    List<String> destinationList; // added for store/restore
     String prevNode;
 
     Graph<String, IdentifiedWeightedEdge> g;
@@ -29,7 +32,30 @@ public class DirectionData {
     public DirectionData(List<GraphPath> orderedEdgeList, List<String> orderedExhibitNames) {
         this.orderedEdgeList = orderedEdgeList;
         this.orderedExhibitNames = orderedExhibitNames;
+    }
 
+    public void setOrderedEdgeList(List<GraphPath> orderedEdgeList) {
+        this.orderedEdgeList = orderedEdgeList;
+    }
+
+    public void setOrderedExhibitNames(List<String> orderedExhibitNames) {
+        this.orderedExhibitNames = orderedExhibitNames;
+    }
+
+    public void setCurrentExhibitIndex(int currentExhibitIndex) {
+        this.currentExhibitIndex = currentExhibitIndex;
+    }
+
+    public int getCurrentExhibitIndex() {
+        return currentExhibitIndex;
+    }
+
+    public void setDestinationList(List<String> destinationList) {
+        this.destinationList = destinationList;
+    }
+
+    public List<String> getDestinationList() {
+        return destinationList;
     }
 
     public void addGraphs(Graph<String, IdentifiedWeightedEdge> g,

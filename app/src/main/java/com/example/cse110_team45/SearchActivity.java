@@ -5,10 +5,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +34,15 @@ public class SearchActivity extends AppCompatActivity {
         Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("exhibit_info.json", this);
 
         searchData = new SearchData(vInfo);
-        
+
+        // added MM 05/26
+        Intent intent = getIntent();
+        if(!intent.getStringArrayListExtra("destinationIdList").isEmpty()) {
+            searchData.setDestinationIdList(intent.getStringArrayListExtra("destinationIdList"));
+            TextView exhibitCountView = findViewById(R.id.exhibitCount);
+            exhibitCountView.setText(String.format("%d", this.searchData.getExhibitCount()));
+        }
+
         adapter = new SearchListAdapter();
         adapter.setHasStableIds(true);
 
@@ -40,7 +53,20 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onPause() {
+        // put a new scenario here for debug
+        super.onPause();
+        Log.i("test", "onPause is called");
+        //SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("lastActivity", "SEARCH");
+        Gson gson = new Gson();
+        String destinationIdListJSON = gson.toJson(searchData.getDestinationIdList());
+        editor.putString("destinationIdListJSON", destinationIdListJSON);
+        editor.apply();
+    }
     
 
     public void onSearchClick(View view) {
@@ -82,4 +108,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
+    public void onClearClick(View view) {
+        searchData.clearDestinationList();
+        TextView exhibitCountView = findViewById(R.id.exhibitCount);
+        exhibitCountView.setText(String.format("%d", this.searchData.getExhibitCount()));
+    }
 }

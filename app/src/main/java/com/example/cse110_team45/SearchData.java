@@ -74,6 +74,9 @@ public class SearchData {
         this.tagMap = new HashMap<>(tagMap);
     }
 
+    public void clearDestinationList() {
+        this.destinationIdList = new ArrayList<>();
+    }
 
     public boolean updateDestinationList(String destination){
 
