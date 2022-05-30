@@ -66,11 +66,6 @@ public class SearchActivity extends AppCompatActivity {
         String destinationIdListJSON = gson.toJson(searchData.getDestinationIdList());
         editor.putString("destinationIdListJSON", destinationIdListJSON);
         editor.apply();
-
-        //SearchStoreData storeData = new SearchStoreData(searchData.getDestinationIdList());
-        Log.i("test3", "problem in writeJSON?");
-        //storeData.writeJSON(this, "exit_state.json");
-        Log.i("test2", "is this called?");
     }
     
 

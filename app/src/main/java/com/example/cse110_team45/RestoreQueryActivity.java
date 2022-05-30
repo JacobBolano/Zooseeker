@@ -11,10 +11,16 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.jgrapht.Graph;
+
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class RestoreQueryActivity extends AppCompatActivity {
+
+    private planData PlanData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,7 @@ public class RestoreQueryActivity extends AppCompatActivity {
         // Open search
         Intent intent;
         Gson gson = new Gson();
+        ArrayList<String> destinationList;
         Type arrayListStringType = new TypeToken<ArrayList<String>>() {
         }.getType();
 
@@ -52,21 +59,41 @@ public class RestoreQueryActivity extends AppCompatActivity {
         switch (lastActivity) {
             case "SEARCH":
                 intent = new Intent(this, SearchActivity.class);
-                ArrayList<String> destinationIdList = gson.fromJson(prefs.getString("destinationIdListJSON", ""), arrayListStringType);
-                intent.putStringArrayListExtra("destinationIdList", destinationIdList);
+                destinationList = gson.fromJson(prefs.getString("destinationIdListJSON", ""), arrayListStringType);
+                intent.putStringArrayListExtra("destinationIdList", destinationList);
                 break;
             case "PLAN":
                 intent = new Intent(this, plan.class);
-                ArrayList<String> destinationList = gson.fromJson(prefs.getString("destinationListJSON", ""), arrayListStringType);
+                destinationList = gson.fromJson(prefs.getString("destinationListJSON", ""), arrayListStringType);
                 intent.putStringArrayListExtra("destinationList", destinationList);
                 break;
             case "DIRECTIONS":
                 intent = new Intent(this, DirectionDetailsActivity.class);
-                ArrayList<String> orderedExhibitNames = gson.fromJson(prefs.getString("orderedExhibitNamesJSON", ""), arrayListStringType);
-                intent.putStringArrayListExtra("orderedExhibitNames", orderedExhibitNames);
+                // ArrayList<String> orderedExhibitNames = gson.fromJson(prefs.getString("orderedExhibitNamesJSON", ""), arrayListStringType);
+                // intent.putStringArrayListExtra("orderedExhibitNames", orderedExhibitNames);
+                // intent.putExtra("orderedEdgeListJSON", prefs.getString("orderedEdgeListJSON", ""));
                 int currentExhibitIndex = prefs.getInt("currentExhibitIndex", 0);
+                destinationList = gson.fromJson(prefs.getString("destinationListJSON",""),arrayListStringType);
+
+                // run plan backend
+
+                // 1. Load the graph...
+                Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("zoo_graph.json", this);
+
+                // 2. Load the information about our nodes and edges...
+                Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("exhibit_info.json", this);
+                Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("trail_info.json", this);
+
+
+                PlanData = new planData(g, vInfo, eInfo, destinationList);
+                this.PlanData.pathFinding();
+                this.PlanData.pathComputation();
+                this.PlanData.orderedPathWithComp();
+
                 intent.putExtra("currentExhibitIndex", currentExhibitIndex);
-                intent.putExtra("orderedEdgeListJSON", prefs.getString("orderedEdgeListJSON", ""));
+                intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) this.PlanData.orderedPathExhibitNames);
+                intent.putExtra("orderedEdgeList", (Serializable) this.PlanData.orderedPathEdgeList);
+                intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.PlanData.destinationList);
                 break;
             default:
                 intent = new Intent(this, SearchActivity.class);
