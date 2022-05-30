@@ -17,7 +17,7 @@ public class DirectionData {
     List<String> orderedExhibitNames;
     String prevNode;
 
-    boolean directionFormat;
+    boolean detailedDirections;
 
     Graph<String, IdentifiedWeightedEdge> g;
     Map<String, ZooData.VertexInfo> vInfo;
@@ -30,7 +30,7 @@ public class DirectionData {
     public DirectionData(List<GraphPath> orderedEdgeList, List<String> orderedExhibitNames) {
         this.orderedEdgeList = orderedEdgeList;
         this.orderedExhibitNames = orderedExhibitNames;
-        this.directionFormat = false;
+        this.detailedDirections = false;
 
     }
 
