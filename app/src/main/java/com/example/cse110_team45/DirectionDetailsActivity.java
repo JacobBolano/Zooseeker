@@ -91,6 +91,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -102,5 +103,15 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         editor.putString("destinationListJSON",destinationListJSON);
         editor.putInt("currentExhibitIndex",directionData.getCurrentExhibitIndex()-1);
         editor.apply();
+    }
+
+    public void onSkipClick(View view) {
+        if(directionData.currentExhibitIndex < directionData.orderedEdgeList.size() && directionData.currentExhibitIndex > 0){
+            adapter.setIndividualDirectionListItems(directionData.skipExhibit());
+            textView.setText(directionData.getTitleText());
+        }
+        else {
+            finish();
+        }
     }
 }
