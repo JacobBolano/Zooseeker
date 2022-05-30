@@ -82,4 +82,8 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
+    public void onShowExhibitsClicked(View view) {
+        List<String> recyclerList = new ArrayList<>(this.searchData.getSelectedExhibits());
+        adapter.setSearchListItems(recyclerList);
+    }
 }
