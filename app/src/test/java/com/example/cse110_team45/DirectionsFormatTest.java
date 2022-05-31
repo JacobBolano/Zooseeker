@@ -30,8 +30,14 @@ public class DirectionsFormatTest {
     }
 
     @Test
-    public void changeFormatTest() {
+    public void changeFormatToTrueTest() {
         directionData.setDirectionType(true);
         assertTrue(directionData.getDirectionType());
+    }
+
+    @Test
+    public void changeFormatToFalseTest() {
+        directionData.setDirectionType(false);
+        assertFalse(directionData.getDirectionType());
     }
 }
