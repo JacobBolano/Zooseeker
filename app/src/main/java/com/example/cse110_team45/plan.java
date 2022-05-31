@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
@@ -77,6 +78,7 @@ public class plan extends AppCompatActivity {
         Intent intent = new Intent(plan.this, DirectionDetailsActivity.class);
 
         intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) this.PlanData.orderedPathExhibitNames);
+        Log.d("destinationList", this.PlanData.destinationList.toString());
         intent.putExtra("orderedEdgeList", (Serializable) this.PlanData.orderedPathEdgeList);
         // MM for compatibility with store/restore
         intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.PlanData.destinationList);

@@ -129,10 +129,16 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                 LatLng currLocation = new LatLng(
                         location.getLatitude(), location.getLongitude());
                 double currDistance = distanceBetween(currLocation, finalExhibitLatLng.get(nextNode));
+                Log.d("curr_distance", ""+currDistance);
                 for(String key : finalExhibitLatLng.keySet()){
-                    if(key != nextNode){
-                        if(distanceBetween(finalExhibitLatLng.get(key), currLocation) > currDistance){
+                    if(!key.equals(nextNode) && !key.equals(directionData.orderedExhibitNames.get(0))){
+                        Log.d("current exhibit", key+ " " + nextNode);
+                        Log.d("distance between", ""+distanceBetween(finalExhibitLatLng.get(key), currLocation));
+                        if(distanceBetween(finalExhibitLatLng.get(key), currLocation) < currDistance){
                             //showalert
+                            Log.d("closer exhibit", key);
+                            Log.d("distance between", ""+distanceBetween(finalExhibitLatLng.get(key), currLocation));
+
                             dialog.show();
                         }
                     }
