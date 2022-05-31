@@ -18,4 +18,12 @@ public class MockIndividualEdge implements MockIndividualDirection{
 
         return "Proceed along " + streetName + " for " + distance + "m to " + nodeTo;
     }
+
+    public String getStreetName(){
+        return streetName;
+    }
+
+    public double getDistance(){
+        return distance;
+    }
 }
