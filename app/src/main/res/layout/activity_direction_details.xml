@@ -79,7 +79,7 @@
         android:id="@+id/settingsButton"
         android:layout_width="119dp"
         android:layout_height="43dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="20dp"
         android:onClick="onSettingsClicked"
         android:text="SWAP DIRECTION STYLE"
         android:textSize="9dp"
