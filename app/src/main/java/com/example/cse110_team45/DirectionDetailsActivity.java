@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     DirectionData directionData;
     List<String> orderedExhibitNames;
     List<GraphPath> orderedEdgeList;
+    List<String> orderedExhibitID;
     String prevNode;
     String nextNode;
     Map <String, LatLng> exhibitLatLng;
@@ -56,6 +58,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         directionData = new DirectionData((List<GraphPath>) intent.getSerializableExtra("orderedEdgeList"), intent.getStringArrayListExtra("orderedExhibitNames"));
 
         // MM we store the destination list so that we can call the plan backend if we restore the directions from storage
+        orderedExhibitID = new ArrayList<String>();
         directionData.setDestinationList(intent.getStringArrayListExtra("destinationList"));
         // MM read in currentExhibitIndex so that directions can be restored from file
         directionData.setCurrentExhibitIndex(intent.getIntExtra("currentExhibitIndex",0));
@@ -64,7 +67,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         orderedExhibitNames = directionData.orderedExhibitNames;
         orderedEdgeList = directionData.orderedEdgeList;
         prevNode = directionData.prevNode;
-        nextNode = orderedExhibitNames.get(0);
+        //nextNode = orderedExhibitNames.get(1);
 
 
         Log.d("Exhibit List",directionData.orderedExhibitNames.toString());
@@ -97,12 +100,21 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         if (PermissionChecker.ensurePermission()) return;
 
-        for(int i = 1; i < orderedExhibitNames.size(); i++){
-            exhibitLatLng.put(orderedExhibitNames.get(i), new LatLng(
-                    vInfo.get(orderedExhibitNames.get(i)).lat,
-                    vInfo.get(orderedExhibitNames.get(i)).lng)
+        for(int i = 1; i < orderedExhibitNames.size() - 1; i++){
+            String categoryToGetLocation = vInfo.get(orderedExhibitNames.get(i)).group_id;
+            if (categoryToGetLocation == null) {
+                // if its null just use its exhibit name
+                categoryToGetLocation = orderedExhibitNames.get(i);
+            }
+            orderedExhibitID.add(categoryToGetLocation);
+            Log.d("CategoryToGetLocation", categoryToGetLocation);
+            exhibitLatLng.put(categoryToGetLocation, new LatLng(
+                    vInfo.get(categoryToGetLocation).lat,
+                    vInfo.get(categoryToGetLocation).lng)
             );
         }
+
+        nextNode = orderedExhibitID.get(0);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you want to replan your exhibits?")
@@ -131,7 +143,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                 double currDistance = distanceBetween(currLocation, finalExhibitLatLng.get(nextNode));
                 Log.d("curr_distance", ""+currDistance);
                 for(String key : finalExhibitLatLng.keySet()){
-                    if(!key.equals(nextNode) && !key.equals(directionData.orderedExhibitNames.get(0))){
+                    if(!key.equals(nextNode)){
                         Log.d("current exhibit", key+ " " + nextNode);
                         Log.d("distance between", ""+distanceBetween(finalExhibitLatLng.get(key), currLocation));
                         if(distanceBetween(finalExhibitLatLng.get(key), currLocation) < currDistance){
@@ -164,6 +176,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
             Log.d("Next", "Here");
             adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
             textView.setText(directionData.getTitleText());
+            nextNode = orderedExhibitID.get(directionData.currentExhibitIndex);
         }
         else{
             finish();

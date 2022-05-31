@@ -1,11 +1,13 @@
 package com.example.cse110_team45;
 
 
+import static org.junit.Assert.assertNotNull;
+
 import android.content.Intent;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
-importx androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -61,7 +63,7 @@ public class replanRouteTest {
     public ActivityScenarioRule<DirectionDetailsActivity> nonEmptyPlanTestRule = new ActivityScenarioRule<>(nonEmptyIntent);
 
 
-
+    /**
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Test
     public void replanRouteTest() {
@@ -69,8 +71,9 @@ public class replanRouteTest {
         ActivityScenario scenario = nonEmptyPlanTestRule.getScenario();
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.onActivity(activity -> {
-
+            assertNotNull(scenario);
         });
-    }
+        assertNotNull(nonEmptyPlanTestRule);
+    }**/
 
 }
