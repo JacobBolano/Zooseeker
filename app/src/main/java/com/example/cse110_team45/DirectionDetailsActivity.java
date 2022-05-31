@@ -24,6 +24,8 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
     DirectionData directionData;
 
+    boolean buttonMostRecentlyPressed=true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
             Log.d("Next", "Here");
             adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
             textView.setText(directionData.getTitleText());
+            buttonMostRecentlyPressed=true;
         }
         else{
             finish();
@@ -81,11 +84,30 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         Log.d("Previous Clicked!", "True");
         adapter.setIndividualDirectionListItems(directionData.getPreviousDirections());
         textView.setText(directionData.getTitleText());
+        buttonMostRecentlyPressed=false;
 
     }
 
     public void onSettingsClicked(View view) {
-        Intent intent = new Intent(DirectionDetailsActivity.this, SettingsActivity.class);
-        startActivity(intent);
+        directionData.setDirectionType(!directionData.getDirectionType());
+        if(buttonMostRecentlyPressed){
+            onPreviousClicked(view);
+            onNextClicked(view);
+        } else {
+            onNextClicked(view);
+            onPreviousClicked(view);
+        }
+//        directionData.currentExhibitIndex--;
+//        directionData.prevNode = prev;
+//        adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
+//        if(directionData.getDirectionType()){
+//            adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirectionsDetailed());
+//        } else{
+//            adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirectionsBrief());
+//        }
     }
+
+
+
+
 }

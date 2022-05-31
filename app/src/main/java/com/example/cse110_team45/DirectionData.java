@@ -17,7 +17,8 @@ public class DirectionData {
     List<String> orderedExhibitNames;
     String prevNode;
 
-    boolean detailedDirections;
+    // false indicates brief styled directions while true is for detailed styled directions
+    boolean directionType;
 
     Graph<String, IdentifiedWeightedEdge> g;
     Map<String, ZooData.VertexInfo> vInfo;
@@ -30,8 +31,16 @@ public class DirectionData {
     public DirectionData(List<GraphPath> orderedEdgeList, List<String> orderedExhibitNames) {
         this.orderedEdgeList = orderedEdgeList;
         this.orderedExhibitNames = orderedExhibitNames;
-        this.detailedDirections = false;
+        this.directionType = true;
 
+    }
+
+    public boolean getDirectionType(){
+        return directionType;
+    }
+
+    public void setDirectionType(boolean newDirectionType){
+        directionType = newDirectionType;
     }
 
     public void addGraphs(Graph<String, IdentifiedWeightedEdge> g,
@@ -44,28 +53,72 @@ public class DirectionData {
     }
 
     public List<MockIndividualEdge> getCurrentExhibitDirections() {
+        List<MockIndividualEdge> output;
+        if(directionType){
+            output =  getCurrentExhibitDirectionsDetailed();
+        } else {
+            output =   getCurrentExhibitDirectionsBrief();
+        }
+        currentExhibitIndex++;
+        return output;
+    }
+
+    public List<MockIndividualEdge> getCurrentExhibitDirectionsDetailed() {
         List<MockIndividualEdge> detailEdgeList = new ArrayList<MockIndividualEdge>();
         List<IdentifiedWeightedEdge> edgePath = orderedEdgeList.get(currentExhibitIndex).getEdgeList();
-        Log.d("Which Exhibit", orderedExhibitNames.get(currentExhibitIndex + 1));
+        Log.d("Which Exhibit", orderedExhibitNames.get(currentExhibitIndex));
+        String localPrevNode= prevNode;
 
         for (int i = 0; i < edgePath.size(); i++) {
             String target =  vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name;
-            if(target.equals(prevNode)){
+            if(target.equals(localPrevNode)){
                 detailEdgeList.add(new MockIndividualEdge(eInfo.get(edgePath.get(i).getId()).street, vInfo.get(g.getEdgeSource(edgePath.get(i)).toString()).name, g.getEdgeWeight(edgePath.get(i))));
             } else {
                 detailEdgeList.add(new MockIndividualEdge(eInfo.get(edgePath.get(i).getId()).street, vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name, g.getEdgeWeight(edgePath.get(i))));
             }
             if (i == edgePath.size() - 1) {
-                if(prevNode != vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name){
+                if(!localPrevNode.equals(vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name)){
                     titleText = vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name;
                 }
                 else{
                     titleText = vInfo.get(g.getEdgeSource(edgePath.get(i)).toString()).name;
                 }
             }
-            prevNode = detailEdgeList.get(i).getNodeTo();
+            localPrevNode = detailEdgeList.get(i).getNodeTo();
         }
-        currentExhibitIndex++;
+        prevNode = localPrevNode;
+        return detailEdgeList;
+    }
+
+    public List<MockIndividualEdge> getCurrentExhibitDirectionsBrief() {
+        List<MockIndividualEdge> detailEdgeList = new ArrayList<MockIndividualEdge>();
+        List<IdentifiedWeightedEdge> edgePath = orderedEdgeList.get(currentExhibitIndex).getEdgeList();
+        Log.d("Which Exhibit", orderedExhibitNames.get(currentExhibitIndex));
+
+        String localPrevNode = prevNode;
+
+        int j = 0;
+        while(j< edgePath.size()){
+            double currDistanceValue = g.getEdgeWeight(edgePath.get(j));
+            String target = vInfo.get(g.getEdgeTarget(edgePath.get(j)).toString()).name;
+            if(target.equals(localPrevNode)){
+                target = vInfo.get(g.getEdgeSource(edgePath.get(j)).toString()).name;
+            }
+            while (j< (edgePath.size()-1) && eInfo.get(edgePath.get(j).getId()).street.equals(eInfo.get(edgePath.get(j+1).getId()).street)){
+                localPrevNode = target;
+                target = vInfo.get(g.getEdgeTarget(edgePath.get(j+1)).toString()).name;
+                if(target.equals(localPrevNode)){
+                    target = vInfo.get(g.getEdgeSource(edgePath.get(j+1)).toString()).name;
+                }
+                currDistanceValue += g.getEdgeWeight(edgePath.get(j+1));
+                localPrevNode = target;
+                j++;
+            }
+            detailEdgeList.add(new MockIndividualEdge(eInfo.get(edgePath.get(j).getId()).street, target ,currDistanceValue));
+            localPrevNode = target;
+            j++;
+        }
+        prevNode = localPrevNode;
         return detailEdgeList;
     }
 
