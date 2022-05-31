@@ -39,7 +39,17 @@ public class DirectionsFormatButtonTest {
     // Searches for single exhibit, changes direction style from brief to detailed,
     // then tests to see if it changed
     @Test
-    public void singleExhibitSwitchDirectionStyleTest() {
+    public void singleExhibitBriefToDetailedTest() {
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.newButton), withText("New Plan"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        materialButton.perform(click());
+
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(
@@ -50,7 +60,7 @@ public class DirectionsFormatButtonTest {
                         isDisplayed()));
         appCompatEditText.perform(replaceText("c"), closeSoftKeyboard());
 
-        ViewInteraction materialButton = onView(
+        ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.search_button), withText("Search"),
                         childAtPosition(
                                 childAtPosition(
@@ -58,7 +68,7 @@ public class DirectionsFormatButtonTest {
                                         0),
                                 1),
                         isDisplayed()));
-        materialButton.perform(click());
+        materialButton2.perform(click());
 
         ViewInteraction materialTextView = onView(
                 allOf(withId(R.id.searchItem), withText("Capuchin Monkeys"),
@@ -70,7 +80,7 @@ public class DirectionsFormatButtonTest {
                         isDisplayed()));
         materialTextView.perform(click());
 
-        ViewInteraction materialButton2 = onView(
+        ViewInteraction materialButton3 = onView(
                 allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
@@ -78,9 +88,9 @@ public class DirectionsFormatButtonTest {
                                         0),
                                 3),
                         isDisplayed()));
-        materialButton2.perform(click());
+        materialButton3.perform(click());
 
-        ViewInteraction materialButton3 = onView(
+        ViewInteraction materialButton4 = onView(
                 allOf(withId(R.id.directionsButton), withText("Directions"),
                         childAtPosition(
                                 childAtPosition(
@@ -88,7 +98,7 @@ public class DirectionsFormatButtonTest {
                                         0),
                                 1),
                         isDisplayed()));
-        materialButton3.perform(click());
+        materialButton4.perform(click());
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.individualDirectionDetail), withText("Proceed along Gate Path for 1100.0m to Front Street / Treetops Way"),
@@ -108,7 +118,7 @@ public class DirectionsFormatButtonTest {
                         isDisplayed()));
         textView3.check(matches(withText("Proceed along Monkey Trail for 4600.0m to Capuchin Monkeys")));
 
-        ViewInteraction materialButton4 = onView(
+        ViewInteraction materialButton5 = onView(
                 allOf(withId(R.id.settingsButton), withText("SWAP DIRECTION STYLE"),
                         childAtPosition(
                                 allOf(withId(R.id.directionList),
@@ -117,13 +127,13 @@ public class DirectionsFormatButtonTest {
                                                 0)),
                                 5),
                         isDisplayed()));
-        materialButton4.perform(click());
+        materialButton5.perform(click());
 
         ViewInteraction textView4 = onView(
                 allOf(withId(R.id.individualDirectionDetail), withText("Proceed along Gate Path for 1100.0m to Front Street / Treetops Way"),
                         withParent(withParent(withId(R.id.direction_lists))),
                         isDisplayed()));
-        textView.check(matches(withText("Proceed along Gate Path for 1100.0m to Front Street / Treetops Way")));
+        textView4.check(matches(withText("Proceed along Gate Path for 1100.0m to Front Street / Treetops Way")));
 
         ViewInteraction textView5 = onView(
                 allOf(withId(R.id.individualDirectionDetail), withText("Proceed along Front Street for 2700.0m to Front Street / Monkey Trail"),
@@ -148,6 +158,16 @@ public class DirectionsFormatButtonTest {
     // continues to the next exhibit, then checks to see if directions are still detailed
     @Test
     public void persistentFormatTest() {
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.newButton), withText("New Plan"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        materialButton.perform(click());
+
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(
@@ -158,7 +178,7 @@ public class DirectionsFormatButtonTest {
                         isDisplayed()));
         appCompatEditText.perform(replaceText("c"), closeSoftKeyboard());
 
-        ViewInteraction materialButton = onView(
+        ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.search_button), withText("Search"),
                         childAtPosition(
                                 childAtPosition(
@@ -166,7 +186,7 @@ public class DirectionsFormatButtonTest {
                                         0),
                                 1),
                         isDisplayed()));
-        materialButton.perform(click());
+        materialButton2.perform(click());
 
         ViewInteraction materialTextView = onView(
                 allOf(withId(R.id.searchItem), withText("Blue Capped Motmot"),
@@ -188,7 +208,7 @@ public class DirectionsFormatButtonTest {
                         isDisplayed()));
         materialTextView2.perform(click());
 
-        ViewInteraction materialButton2 = onView(
+        ViewInteraction materialButton3 = onView(
                 allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
@@ -196,9 +216,9 @@ public class DirectionsFormatButtonTest {
                                         0),
                                 3),
                         isDisplayed()));
-        materialButton2.perform(click());
+        materialButton3.perform(click());
 
-        ViewInteraction materialButton3 = onView(
+        ViewInteraction materialButton4 = onView(
                 allOf(withId(R.id.directionsButton), withText("Directions"),
                         childAtPosition(
                                 childAtPosition(
@@ -206,9 +226,9 @@ public class DirectionsFormatButtonTest {
                                         0),
                                 1),
                         isDisplayed()));
-        materialButton3.perform(click());
+        materialButton4.perform(click());
 
-        ViewInteraction materialButton4 = onView(
+        ViewInteraction materialButton5 = onView(
                 allOf(withId(R.id.settingsButton), withText("SWAP DIRECTION STYLE"),
                         childAtPosition(
                                 allOf(withId(R.id.directionList),
@@ -217,9 +237,9 @@ public class DirectionsFormatButtonTest {
                                                 0)),
                                 5),
                         isDisplayed()));
-        materialButton4.perform(click());
+        materialButton5.perform(click());
 
-        ViewInteraction materialButton5 = onView(
+        ViewInteraction materialButton6 = onView(
                 allOf(withId(R.id.nextButton), withText("NEXT"),
                         childAtPosition(
                                 allOf(withId(R.id.directionList),
@@ -228,7 +248,7 @@ public class DirectionsFormatButtonTest {
                                                 0)),
                                 3),
                         isDisplayed()));
-        materialButton5.perform(click());
+        materialButton6.perform(click());
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.individualDirectionDetail), withText("Proceed along Treetops Way for 2300.0m to Treetops Way / Hippo Trail"),
@@ -259,6 +279,130 @@ public class DirectionsFormatButtonTest {
                         withParent(withParent(withId(R.id.direction_lists))),
                         isDisplayed()));
         textView5.check(matches(withText("Proceed along Monkey Trail for 2300.0m to Capuchin Monkeys")));
+    }
+
+    @Test
+    public void detailedToBriefTest() {
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.newButton), withText("New Plan"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        materialButton.perform(click());
+
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.search_bar),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText.perform(replaceText("c"), closeSoftKeyboard());
+
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.search_button), withText("Search"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialButton2.perform(click());
+
+        ViewInteraction materialTextView = onView(
+                allOf(withId(R.id.searchItem), withText("Blue Capped Motmot"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.recycler_id),
+                                        2),
+                                0),
+                        isDisplayed()));
+        materialTextView.perform(click());
+
+        ViewInteraction materialTextView2 = onView(
+                allOf(withId(R.id.searchItem), withText("Capuchin Monkeys"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.recycler_id),
+                                        1),
+                                0),
+                        isDisplayed()));
+        materialTextView2.perform(click());
+
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.plan_button), withText("Plan"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        materialButton3.perform(click());
+
+        ViewInteraction materialButton4 = onView(
+                allOf(withId(R.id.directionsButton), withText("Directions"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialButton4.perform(click());
+
+        ViewInteraction materialButton5 = onView(
+                allOf(withId(R.id.settingsButton), withText("SWAP DIRECTION STYLE"),
+                        childAtPosition(
+                                allOf(withId(R.id.directionList),
+                                        childAtPosition(
+                                                withId(android.R.id.content),
+                                                0)),
+                                5),
+                        isDisplayed()));
+        materialButton5.perform(click());
+
+        ViewInteraction materialButton6 = onView(
+                allOf(withId(R.id.nextButton), withText("NEXT"),
+                        childAtPosition(
+                                allOf(withId(R.id.directionList),
+                                        childAtPosition(
+                                                withId(android.R.id.content),
+                                                0)),
+                                3),
+                        isDisplayed()));
+        materialButton6.perform(click());
+
+        ViewInteraction materialButton7 = onView(
+                allOf(withId(R.id.settingsButton), withText("SWAP DIRECTION STYLE"),
+                        childAtPosition(
+                                allOf(withId(R.id.directionList),
+                                        childAtPosition(
+                                                withId(android.R.id.content),
+                                                0)),
+                                5),
+                        isDisplayed()));
+        materialButton7.perform(click());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.individualDirectionDetail), withText("Proceed along Treetops Way for 2300.0m to Treetops Way / Hippo Trail"),
+                        withParent(withParent(withId(R.id.direction_lists))),
+                        isDisplayed()));
+        textView.check(matches(withText("Proceed along Treetops Way for 2300.0m to Treetops Way / Hippo Trail")));
+
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.individualDirectionDetail), withText("Proceed along Hippo Trail for 4500.0m to Monkey Trail / Hippo Trail"),
+                        withParent(withParent(withId(R.id.direction_lists))),
+                        isDisplayed()));
+        textView2.check(matches(withText("Proceed along Hippo Trail for 4500.0m to Monkey Trail / Hippo Trail")));
+
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.individualDirectionDetail), withText("Proceed along Monkey Trail for 2300.0m to Capuchin Monkeys"),
+                        withParent(withParent(withId(R.id.direction_lists))),
+                        isDisplayed()));
+        textView3.check(matches(withText("Proceed along Monkey Trail for 2300.0m to Capuchin Monkeys")));
     }
 
     private static Matcher<View> childAtPosition(
