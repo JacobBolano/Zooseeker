@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +16,9 @@ public class DirectionData {
 
     List<GraphPath> orderedEdgeList;
     List<String> orderedExhibitNames;
+
+
+    List<String> destinationList; // added for store/restore
     String prevNode;
 
     // false indicates brief styled directions while true is for detailed styled directions
@@ -31,6 +35,7 @@ public class DirectionData {
     public DirectionData(List<GraphPath> orderedEdgeList, List<String> orderedExhibitNames) {
         this.orderedEdgeList = orderedEdgeList;
         this.orderedExhibitNames = orderedExhibitNames;
+
         this.directionType = false;
 
     }
@@ -41,6 +46,31 @@ public class DirectionData {
 
     public void setDirectionType(boolean newDirectionType){
         directionType = newDirectionType;
+
+    }
+
+    public void setOrderedEdgeList(List<GraphPath> orderedEdgeList) {
+        this.orderedEdgeList = orderedEdgeList;
+    }
+
+    public void setOrderedExhibitNames(List<String> orderedExhibitNames) {
+        this.orderedExhibitNames = orderedExhibitNames;
+    }
+
+    public void setCurrentExhibitIndex(int currentExhibitIndex) {
+        this.currentExhibitIndex = currentExhibitIndex;
+    }
+
+    public int getCurrentExhibitIndex() {
+        return currentExhibitIndex;
+    }
+
+    public void setDestinationList(List<String> destinationList) {
+        this.destinationList = destinationList;
+    }
+
+    public List<String> getDestinationList() {
+        return destinationList;
     }
 
     public void addGraphs(Graph<String, IdentifiedWeightedEdge> g,
@@ -169,6 +199,42 @@ public class DirectionData {
 
         Collections.reverse(reverseEdgeList);
         return reverseEdgeList;
+    }
+
+
+    public List<MockIndividualEdge> skipExhibit(){
+        Log.d("Skipping This Exhibit", orderedExhibitNames.get(currentExhibitIndex));
+        orderedEdgeList.remove(currentExhibitIndex - 1);
+        orderedExhibitNames.remove(currentExhibitIndex);
+
+        currentExhibitIndex--;
+        ZooData.VertexInfo sourceNode = getCurrentExhibit();
+        String source;
+        if(sourceNode.group_id != null){
+            source = sourceNode.group_id;
+        }
+        else {
+            source = sourceNode.id;
+        }
+        Log.d("Source", source);
+
+        currentExhibitIndex++;
+        ZooData.VertexInfo goalNode = getCurrentExhibit();
+        String goal;
+        if(goalNode.group_id != null){
+            goal = goalNode.group_id;
+        }
+        else{
+            goal = goalNode.id;
+        }
+        Log.d("Goal", goal);
+        currentExhibitIndex--;
+
+        GraphPath<String, IdentifiedWeightedEdge> pathBetween = DijkstraShortestPath.findPathBetween(g, source, goal);
+        orderedEdgeList.set(currentExhibitIndex, pathBetween);
+        System.out.println(orderedEdgeList);
+
+        return getCurrentExhibitDirections();
     }
 
 

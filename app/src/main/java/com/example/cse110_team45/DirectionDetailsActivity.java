@@ -5,10 +5,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -34,10 +38,13 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        directionData = new DirectionData((List<GraphPath>) intent.getSerializableExtra("orderedEdgeList"), intent.getStringArrayListExtra("orderedExhibitNames"));
 
-        directionData = new DirectionData((List<GraphPath>) intent.getSerializableExtra("orderedEdgeList"),
-                intent.getStringArrayListExtra("orderedExhibitNames"));
-
+        // MM we store the destination list so that we can call the plan backend if we restore the directions from storage
+        directionData.setDestinationList(intent.getStringArrayListExtra("destinationList"));
+        // MM read in currentExhibitIndex so that directions can be restored from file
+        directionData.setCurrentExhibitIndex(intent.getIntExtra("currentExhibitIndex",0));
+        //directionData.setCurrentExhibitIndex(intent.getIntExtra("currentExhibitIndex"));
 
         Log.d("Exhibit List",directionData.orderedExhibitNames.toString());
         Log.d("Edge List", directionData.orderedEdgeList.toString());
@@ -109,5 +116,26 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
 
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("lastActivity", "DIRECTIONS");
+        Gson gson = new Gson();
+        String destinationListJSON = gson.toJson(directionData.getDestinationList());
+        editor.putString("destinationListJSON",destinationListJSON);
+        editor.putInt("currentExhibitIndex",directionData.getCurrentExhibitIndex()-1);
+        editor.apply();
+    }
 
+    public void onSkipClick(View view) {
+        if(directionData.currentExhibitIndex < directionData.orderedEdgeList.size() && directionData.currentExhibitIndex > 0){
+            adapter.setIndividualDirectionListItems(directionData.skipExhibit());
+            textView.setText(directionData.getTitleText());
+        }
+        else {
+            finish();
+        }
+    }
 }

@@ -88,5 +88,18 @@
         app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
         app:layout_constraintRight_toRightOf="@id/myRectangleView" />
 
+    <Button
+        android:id="@+id/skipButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Skip"
+        android:onClick="onSkipClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.549"
+        app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
+        app:layout_constraintRight_toRightOf="@id/myRectangleView"
+        app:layout_constraintTop_toBottomOf="@id/myRectangleView"
+        app:layout_constraintVertical_bias="0.047" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
