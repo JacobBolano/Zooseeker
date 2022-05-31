@@ -40,10 +40,13 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     DirectionData directionData;
     List<String> orderedExhibitNames;
     List<GraphPath> orderedEdgeList;
+    String closestExhibit;
+    Map<String, ZooData.VertexInfo> vInfo;
     List<String> orderedExhibitID;
     String prevNode;
     String nextNode;
     Map <String, LatLng> exhibitLatLng;
+    boolean wantToReplan;
     private final permissionChecker PermissionChecker = new permissionChecker(this);
 
     @Override
@@ -54,11 +57,11 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         exhibitLatLng = new HashMap<String, LatLng>();
-
+        orderedExhibitID = new ArrayList<String>();
+        wantToReplan = true;
         directionData = new DirectionData((List<GraphPath>) intent.getSerializableExtra("orderedEdgeList"), intent.getStringArrayListExtra("orderedExhibitNames"));
 
         // MM we store the destination list so that we can call the plan backend if we restore the directions from storage
-        orderedExhibitID = new ArrayList<String>();
         directionData.setDestinationList(intent.getStringArrayListExtra("destinationList"));
         // MM read in currentExhibitIndex so that directions can be restored from file
         directionData.setCurrentExhibitIndex(intent.getIntExtra("currentExhibitIndex",0));
@@ -66,6 +69,9 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         orderedExhibitNames = directionData.orderedExhibitNames;
         orderedEdgeList = directionData.orderedEdgeList;
+
+        Log.d("YO orderedEdgeList: ", orderedEdgeList.toString());
+
         prevNode = directionData.prevNode;
         //nextNode = orderedExhibitNames.get(1);
 
@@ -77,7 +83,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("zoo_graph.json", this);
 
         // 2. Load the information about our nodes and edges...
-        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("exhibit_info.json", this);
+        vInfo = ZooData.loadVertexInfoJSON("exhibit_info.json", this);
         Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("trail_info.json", this);
 
         directionData.addGraphs(g, vInfo, eInfo);
@@ -100,7 +106,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         if (PermissionChecker.ensurePermission()) return;
 
-        for(int i = 1; i < orderedExhibitNames.size() - 1; i++){
+        for(int i = 1; i < orderedExhibitNames.size(); i++){
             String categoryToGetLocation = vInfo.get(orderedExhibitNames.get(i)).group_id;
             if (categoryToGetLocation == null) {
                 // if its null just use its exhibit name
@@ -121,12 +127,26 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                 .setTitle("You are off track")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // they want to replan
+                        ArrayList<String>  newVisits = new ArrayList<String>();
+                        for(int i = directionData.currentExhibitIndex; i < directionData.orderedExhibitNames.size(); i++){
+                            newVisits.add(directionData.orderedExhibitNames.get(i));
+                        }
+                        planData PlanData = new planData(g, vInfo, eInfo,newVisits);
+                        PlanData.pathFinding(closestExhibit);
+                        DirectionData tempdData = new DirectionData(PlanData.orderedPathEdgeList, PlanData.orderedPathExhibitNames);
+                        for(int i = directionData.currentExhibitIndex; i < directionData.orderedExhibitNames.size(); i++){
+                            directionData.orderedEdgeList.set(i, tempdData.orderedEdgeList.get(i-directionData.currentExhibitIndex));
+                            directionData.orderedExhibitNames.set(i, tempdData.orderedExhibitNames.get(i-directionData.currentExhibitIndex));
+                        }
+                        directionData.currentExhibitIndex--;
+                        adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
+                        textView.setText(directionData.getTitleText());
                     }
                 })
                 .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // they do not want to replan
+                        wantToReplan = false;
                     }
                 });
         AlertDialog dialog = builder.create();
@@ -137,21 +157,23 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         var locationListener = new LocationListener(){
             @Override
             public void onLocationChanged(@NonNull Location location){
-                Log.d("Replan Route", String.format("Location changed %s", location));
-                LatLng currLocation = new LatLng(
-                        location.getLatitude(), location.getLongitude());
-                double currDistance = distanceBetween(currLocation, finalExhibitLatLng.get(nextNode));
-                Log.d("curr_distance", ""+currDistance);
-                for(String key : finalExhibitLatLng.keySet()){
-                    if(!key.equals(nextNode)){
-                        Log.d("current exhibit", key+ " " + nextNode);
-                        Log.d("distance between", ""+distanceBetween(finalExhibitLatLng.get(key), currLocation));
-                        if(distanceBetween(finalExhibitLatLng.get(key), currLocation) < currDistance){
-                            //showalert
-                            Log.d("closer exhibit", key);
+                if (wantToReplan) {
+                    Log.d("Replan Route", String.format("Location changed %s", location));
+                    LatLng currLocation = new LatLng(
+                            location.getLatitude(), location.getLongitude());
+                    double currDistance = distanceBetween(currLocation, finalExhibitLatLng.get(nextNode));
+                    Log.d("curr_distance", ""+currDistance);
+                    for(String key : finalExhibitLatLng.keySet()){
+                        if(!key.equals(nextNode)){
+                            Log.d("current exhibit", key+ " " + nextNode);
                             Log.d("distance between", ""+distanceBetween(finalExhibitLatLng.get(key), currLocation));
-
-                            dialog.show();
+                            if(distanceBetween(finalExhibitLatLng.get(key), currLocation) < currDistance){
+                                //showalert
+                                Log.d("closer exhibit", key);
+                                Log.d("distance between", ""+distanceBetween(finalExhibitLatLng.get(key), currLocation));
+                                closestExhibit = getNearestExhibit(currLocation);
+                                dialog.show();
+                            }
                         }
                     }
                 }
@@ -171,12 +193,12 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
     public void onNextClicked(View view) {
 
-        if(directionData.currentExhibitIndex < directionData.orderedEdgeList.size()){
-
+        if(directionData.getCurrentExhibitIndex() < directionData.orderedEdgeList.size()){
+            wantToReplan = true;
             Log.d("Next", "Here");
             adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
             textView.setText(directionData.getTitleText());
-            nextNode = orderedExhibitID.get(directionData.currentExhibitIndex);
+            setNextNode();
         }
         else{
             finish();
@@ -188,7 +210,8 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         Log.d("Previous Clicked!", "True");
         adapter.setIndividualDirectionListItems(directionData.getPreviousDirections());
         textView.setText(directionData.getTitleText());
-
+        wantToReplan = true;
+        setNextNode();
     }
 
 
@@ -206,12 +229,39 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     }
 
     public void onSkipClick(View view) {
-        if(directionData.currentExhibitIndex < directionData.orderedEdgeList.size() && directionData.currentExhibitIndex > 0){
+        if(directionData.getCurrentExhibitIndex() < directionData.orderedEdgeList.size() && directionData.currentExhibitIndex > 0){
             adapter.setIndividualDirectionListItems(directionData.skipExhibit());
             textView.setText(directionData.getTitleText());
+            wantToReplan = true;
+            setNextNode();
         }
         else {
             finish();
         }
+    }
+
+    public String getNearestExhibit(LatLng currLoc){
+        double nearestExhibitDist = Float.MAX_VALUE;
+        String nearestExhibit = "";
+        for(String key : vInfo.keySet()){
+            double distBetweenCurr = distanceBetween(new LatLng(vInfo.get(key).lat,vInfo.get(key).lng), currLoc);
+            if(distBetweenCurr < nearestExhibitDist){
+                nearestExhibitDist = distBetweenCurr;
+            }
+        }
+        return nearestExhibit;
+    }
+
+    public void setNextNode() {
+        String currentExhibitCategory = directionData.getCurrentExhibit().id;
+        if (directionData.getCurrentExhibit().group_id != null) {
+            currentExhibitCategory = directionData.getCurrentExhibit().group_id;
+        }
+        Log.d("Current Exhibit Category: ", currentExhibitCategory);
+        int orderedExhibitIDIndex = orderedExhibitID.indexOf(currentExhibitCategory);
+        if (orderedExhibitIDIndex == orderedExhibitID.size() - 1) {
+            wantToReplan = false;
+        }
+        nextNode = orderedExhibitID.get(orderedExhibitIDIndex);
     }
 }

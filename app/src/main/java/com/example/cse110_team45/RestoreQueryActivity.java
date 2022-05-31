@@ -86,7 +86,7 @@ public class RestoreQueryActivity extends AppCompatActivity {
 
 
                 PlanData = new planData(g, vInfo, eInfo, destinationList);
-                this.PlanData.pathFinding();
+                this.PlanData.pathFinding("start");
                 this.PlanData.pathComputation();
                 this.PlanData.orderedPathWithComp();
 

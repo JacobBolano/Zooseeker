@@ -45,7 +45,7 @@ public class plan extends AppCompatActivity {
         Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("trail_info.json", this);
 
         PlanData = new planData(g, vInfo, eInfo, visits);
-        this.PlanData.pathFinding();
+        this.PlanData.pathFinding("start");
         this.PlanData.pathComputation();
         this.PlanData.orderedPathWithComp();
 

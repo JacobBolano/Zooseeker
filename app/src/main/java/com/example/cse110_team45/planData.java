@@ -53,8 +53,11 @@ public class planData {
 
     }
 
-    public void pathFinding(){
+    public void pathFinding(String startLoc){
         //Pathfinding
+        if(startLoc.equals("start")) {
+            startLoc = start;
+        }
         orderedPathExhibitNames.add(start);
         GraphPath testedPath = null;
         String source = start;
