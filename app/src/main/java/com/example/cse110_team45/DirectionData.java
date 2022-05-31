@@ -31,7 +31,7 @@ public class DirectionData {
     public DirectionData(List<GraphPath> orderedEdgeList, List<String> orderedExhibitNames) {
         this.orderedEdgeList = orderedEdgeList;
         this.orderedExhibitNames = orderedExhibitNames;
-        this.directionType = true;
+        this.directionType = false;
 
     }
 
