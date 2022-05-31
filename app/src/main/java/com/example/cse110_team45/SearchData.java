@@ -18,9 +18,11 @@ public class SearchData {
     private Map<String, String> exhibitMap;
     private Map<String, List<String>> tagMap;
     private List<String> destinationIdList;
+    private Map<String, ZooData.VertexInfo> vInfo;
 
 
     SearchData(Map<String, ZooData.VertexInfo> vInfo){
+        this.vInfo = vInfo;
         this.exhibitMap = new HashMap<>();
         this.tagMap = new HashMap<>();
 
@@ -51,6 +53,13 @@ public class SearchData {
     public List<String> getDestinationIdList() {
         System.out.println(destinationIdList);
         return destinationIdList;
+    }
+    public List<String> getSelectedExhibits(){
+        List<String> selectedExhibits = new ArrayList<>();
+        for(String id: destinationIdList){
+            selectedExhibits.add(vInfo.get(id).name);
+        }
+        return selectedExhibits;
     }
 
     public Map<String, String> getExhibitMap() {

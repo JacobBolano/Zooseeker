@@ -108,9 +108,15 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
+    public void onShowExhibitsClicked(View view) {
+        List<String> recyclerList = new ArrayList<>(this.searchData.getSelectedExhibits());
+        adapter.setSearchListItems(recyclerList);
+    }
+  
     public void onClearClick(View view) {
         searchData.clearDestinationList();
         TextView exhibitCountView = findViewById(R.id.exhibitCount);
         exhibitCountView.setText(String.format("%d", this.searchData.getExhibitCount()));
+
     }
 }
