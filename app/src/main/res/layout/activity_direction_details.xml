@@ -79,7 +79,7 @@
         android:id="@+id/settingsButton"
         android:layout_width="119dp"
         android:layout_height="43dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="40dp"
         android:onClick="onSettingsClicked"
         android:text="SWAP DIRECTION STYLE"
         android:textSize="9dp"
@@ -100,6 +100,45 @@
         app:layout_constraintRight_toRightOf="@id/myRectangleView"
         app:layout_constraintTop_toBottomOf="@id/myRectangleView"
         app:layout_constraintVertical_bias="0.047" />
+
+    <Button
+        android:id="@+id/inputLocButton"
+        android:layout_width="119dp"
+        android:layout_height="43dp"
+        android:layout_marginBottom="40dp"
+
+        android:onClick="inputLocButton"
+        android:text="Input Location"
+        android:textSize="9dp"
+        app:layout_constraintBottom_toTopOf="@id/myRectangleView"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
+        app:layout_constraintRight_toRightOf="@id/myRectangleView" />
+
+    <EditText
+        android:id="@+id/inputLat"
+        android:layout_width="119dp"
+        android:layout_height="wrap_content"
+
+        android:hint="Latitude"
+        app:layout_constraintBottom_toTopOf="@id/myRectangleView"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
+        app:layout_constraintRight_toRightOf="@id/myRectangleView"
+        />
+    <EditText
+        android:id="@+id/inputLong"
+        android:layout_width="119dp"
+        android:layout_height="wrap_content"
+
+        android:fontFamily="sans-serif"
+        app:layout_constraintBottom_toTopOf="@id/myRectangleView"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
+        app:layout_constraintRight_toRightOf="@id/myRectangleView"
+        android:hint="Longitutde"/>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

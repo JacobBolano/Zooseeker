@@ -3,8 +3,11 @@ package com.example.cse110_team45;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.location.LocationManager;
+
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,12 +17,20 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.cse110_team45.location.Coord;
+import com.example.cse110_team45.location.LocationModel;
+import com.example.cse110_team45.location.LocationPermissionChecker;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
@@ -38,7 +49,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     DirectionAdapter adapter;
 
     DirectionData directionData;
-
+    String currExhibit;
     List<String> orderedExhibitNames;
     List<GraphPath> orderedEdgeList;
     String closestExhibit;
@@ -46,6 +57,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     List<String> orderedExhibitID;
     String prevNode;
     String nextNode;
+    AlertDialog dialog;
     Map <String, LatLng> exhibitLatLng;
     double prevDistance = Double.MAX_VALUE;
     boolean wantToReplan;
@@ -54,6 +66,8 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
     boolean buttonMostRecentlyPressed=true;
 
+    public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
+    private boolean useLocationService;
 
 
     @Override
@@ -61,6 +75,13 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction_details);
+
+        //NEW CODE
+
+        useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, true);
+
+
+        //NEW CODE
 
         Intent intent = getIntent();
 
@@ -114,9 +135,6 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
         textView.setText(directionData.getTitleText());
 
-
-        // NEW STUFF
-
         if (PermissionChecker.ensurePermission()) return;
 
         for(int i = 1; i < orderedExhibitNames.size(); i++){
@@ -147,6 +165,9 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                         Log.d("new visit", newVisits.toString());
                         planData PlanData = new planData(g, vInfo, eInfo, newVisits);
                         PlanData.makeSet();
+                        if (vInfo.get(closestExhibit).group_id != null) {
+                            closestExhibit = vInfo.get(closestExhibit).group_id;
+                        }
                         Log.d("PlanData exhibit names", PlanData.orderedPathExhibitNames.toString());
                         PlanData.pathFinding(closestExhibit);
                         Log.d("PlanData exhibit names", PlanData.orderedPathExhibitNames.toString());
@@ -176,58 +197,59 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                         wantToReplan = false;
                     }
                 });
-        AlertDialog dialog = builder.create();
+        dialog = builder.create();
 
         var provider = LocationManager.GPS_PROVIDER;
         var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
         Map<String, LatLng> finalExhibitLatLng = exhibitLatLng;
-        String currExhibit = directionData.orderedExhibitNames.get(directionData.currentExhibitIndex);
+        currExhibit = directionData.orderedExhibitNames.get(directionData.currentExhibitIndex);
         if (vInfo.get(directionData.orderedExhibitNames.get(directionData.currentExhibitIndex)).group_id != null) {
             currExhibit = vInfo.get(directionData.orderedExhibitNames.get(directionData.currentExhibitIndex)).group_id;
         }
         String finalCurrExhibit = currExhibit;
-        var locationListener = new LocationListener(){
-            @Override
-            public void onLocationChanged(@NonNull Location location){
-                LatLng currLocation = new LatLng(
-                        location.getLatitude(), location.getLongitude());
-                Log.d("prevDistance", ""+prevDistance);
-                Log.d("currDistance", ""+distanceBetween(currLocation, exhibitLatLng.get(finalCurrExhibit)));
-                if(prevDistance <= distanceBetween(currLocation, exhibitLatLng.get(finalCurrExhibit))){
-                    directionData.changeCurrentDirection(getNearestExhibit(currLocation));
-                    directionData.currentExhibitIndex--;
-                    adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
-                    textView.setText(directionData.getTitleText());
-                }
-                prevDistance = distanceBetween(currLocation, exhibitLatLng.get(finalCurrExhibit));
-                if (wantToReplan) {
-                    Log.d("Replan Route", String.format("Location changed %s", location));
-                    double currDistance = distanceBetween(currLocation, finalExhibitLatLng.get(nextNode));
-                    Log.d("directionData.orderedExhibitNames", directionData.orderedExhibitNames.toString());
-                    Log.d("index", ""+directionData.currentExhibitIndex);
-                    Log.d("current distance", ""+currDistance);
-                    for(int i = directionData.currentExhibitIndex+1; i < directionData.orderedExhibitNames.size(); i++){
-                        String key = directionData.orderedExhibitNames.get(i);
-                        if (vInfo.get(key).group_id != null) {
-                            key = vInfo.get(key).group_id;
-                        }
 
-                        if(!key.equals(nextNode)){
-                            Log.d("current exhibit", key+ " " + nextNode);
-                            Log.d("distance between", ""+distanceBetween(finalExhibitLatLng.get(key), currLocation));
-                            if(distanceBetween(finalExhibitLatLng.get(key), currLocation) < currDistance && !key.equals(directionData.orderedExhibitNames.get(0))){
-                                //showalert
-                                Log.d("closer exhibit", key);
-                                Log.d("distance between", ""+distanceBetween(finalExhibitLatLng.get(key), currLocation));
-                                closestExhibit = getNearestExhibit(currLocation);
-                                dialog.show();
+        if(useLocationService) {
+            var locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    LatLng currLocation = new LatLng(
+                            location.getLatitude(), location.getLongitude());
+                    Log.d("Current Location", currLocation.toString());
+                    if (prevDistance < distanceBetween(currLocation, exhibitLatLng.get(finalCurrExhibit))) {
+                        directionData.changeCurrentDirection(getNearestExhibit(currLocation));
+                        adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
+                        textView.setText(directionData.getTitleText());
+                    }
+                    if (wantToReplan) {
+                        Log.d("Replan Route", String.format("Location changed %s", location));
+                        double currDistance = distanceBetween(currLocation, finalExhibitLatLng.get(nextNode));
+                        Log.d("directionData.orderedExhibitNames", directionData.orderedExhibitNames.toString());
+                        Log.d("index", "" + directionData.currentExhibitIndex);
+                        Log.d("current distance", "" + currDistance);
+                        for (int i = directionData.currentExhibitIndex + 1; i < directionData.orderedExhibitNames.size(); i++) {
+                            String key = directionData.orderedExhibitNames.get(i);
+                            if (vInfo.get(key).group_id != null) {
+                                key = vInfo.get(key).group_id;
+                            }
+                            if (!key.equals(nextNode)) {
+                                Log.d("current exhibit", key + " " + nextNode);
+                                Log.d("distance between", "" + distanceBetween(finalExhibitLatLng.get(key), currLocation));
+                                if (distanceBetween(finalExhibitLatLng.get(key), currLocation) < currDistance && !key.equals(directionData.orderedExhibitNames.get(0))) {
+                                    //showalert
+                                    Log.d("closer exhibit", key);
+                                    Log.d("distance between", "" + distanceBetween(finalExhibitLatLng.get(key), currLocation));
+                                    closestExhibit = getNearestExhibit(currLocation);
+                                    dialog.show();
+                                }
                             }
                         }
                     }
                 }
-            }
-        };
-        locationManager.requestLocationUpdates(provider,0,0f,locationListener);
+            };
+            locationManager.requestLocationUpdates(provider,0,0f,locationListener);
+        }
+
 
     }
 
@@ -308,7 +330,6 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         if(directionData.getCurrentExhibitIndex() < directionData.orderedEdgeList.size() && directionData.currentExhibitIndex > 0){
 
-
             //use the .skipExhibit() to remove the current exhibit from the list, this also returns the new directions
 
             adapter.setIndividualDirectionListItems(directionData.skipExhibit());
@@ -322,7 +343,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     }
 
     public String getNearestExhibit(LatLng currLoc){
-        double nearestExhibitDist = Float.MAX_VALUE;
+        double nearestExhibitDist = Double.MAX_VALUE;
         String nearestExhibit = "";
         for(String key : vInfo.keySet()){
             double distBetweenCurr = distanceBetween(new LatLng(vInfo.get(key).lat,vInfo.get(key).lng), currLoc);
@@ -331,6 +352,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                 nearestExhibit = key;
             }
         }
+        Log.d("Nearest Exhibit: ", nearestExhibit);
         return nearestExhibit;
     }
 
@@ -346,5 +368,56 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         }
         nextNode = orderedExhibitID.get(orderedExhibitIDIndex);
     }
+
+    public void inputLocButton(View view) {
+
+        EditText inputLongEdit = (EditText) findViewById(R.id.inputLong);
+        EditText inputLatEdit = (EditText) findViewById(R.id.inputLat);
+
+        Log.d("Input Long", inputLongEdit.getText().toString());
+        Log.d("Input Lat", inputLatEdit.getText().toString());
+
+        Double inputLongDouble = Double.parseDouble(inputLongEdit.getText().toString());
+        Double inputLatDouble = Double.parseDouble(inputLatEdit.getText().toString());
+
+        LatLng currLocation = new LatLng(inputLatDouble, inputLongDouble);
+        Log.d("Current Location", currLocation.toString());
+        onLocationChanging(currLocation);
+    }
+
+public void onLocationChanging(LatLng currLocation){
+    if(prevDistance < distanceBetween(currLocation, exhibitLatLng.get(currExhibit))){
+        directionData.changeCurrentDirection(getNearestExhibit(currLocation));
+        adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
+        textView.setText(directionData.getTitleText());
+    }
+    if (wantToReplan) {
+        double currDistance = distanceBetween(currLocation, exhibitLatLng.get(nextNode));
+        Log.d("directionData.orderedExhibitNames", directionData.orderedExhibitNames.toString());
+        Log.d("index", ""+directionData.currentExhibitIndex);
+        Log.d("current distance", ""+currDistance);
+        for(int i = directionData.currentExhibitIndex+1; i < directionData.orderedExhibitNames.size(); i++){
+            String key = directionData.orderedExhibitNames.get(i);
+            if (vInfo.get(key).group_id != null) {
+                key = vInfo.get(key).group_id;
+            }
+
+            if(!key.equals(nextNode)){
+                Log.d("current exhibit", key+ " " + nextNode);
+                Log.d("distance between", ""+distanceBetween(exhibitLatLng.get(key), currLocation));
+                if(distanceBetween(exhibitLatLng.get(key), currLocation) < currDistance && !key.equals(directionData.orderedExhibitNames.get(0))){
+                    //showalert
+                    Log.d("closer exhibit", key);
+                    Log.d("distance between", ""+distanceBetween(exhibitLatLng.get(key), currLocation));
+                    closestExhibit = getNearestExhibit(currLocation);
+                    dialog.show();
+                }
+            }
+        }
+    }
+
+}
+
+
 
 }
