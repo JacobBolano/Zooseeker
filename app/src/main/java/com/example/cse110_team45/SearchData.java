@@ -87,6 +87,12 @@ public class SearchData {
         this.destinationIdList = new ArrayList<>();
     }
 
+
+    /*
+    check to see if destination is already stored
+    if not add it and return true
+    if it is return false
+     */
     public boolean updateDestinationList(String destination){
 
         String destination_id = exhibitMap.get(destination);
@@ -108,6 +114,7 @@ public class SearchData {
         else {
             searchText = searchText.toLowerCase(Locale.ROOT);
 
+            //add anything that contains the search text or that has tags containing the sea to the set to return
             for(Map.Entry<String, String> exhibitEntry : this.exhibitMap.entrySet()){
                 if(exhibitEntry.getKey().toLowerCase(Locale.ROOT).contains(searchText)){
                     returnSet.add(exhibitEntry.getKey());
