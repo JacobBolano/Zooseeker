@@ -177,7 +177,23 @@ public class DirectionData {
 
         return getCurrentExhibitDirections();
     }
+    public void changeCurrentDirection(String exhibit){
 
+        ZooData.VertexInfo sourceNode = vInfo.get(exhibit);
+        String source;
+        if(sourceNode.group_id != null){
+            source = sourceNode.group_id;
+        }
+        else {
+            source = sourceNode.id;
+        }
+        Log.d("Source", source);
+
+
+        GraphPath<String, IdentifiedWeightedEdge> pathBetween = DijkstraShortestPath.findPathBetween(g, source, orderedExhibitNames.get(currentExhibitIndex));
+        orderedEdgeList.set(currentExhibitIndex-1, pathBetween);
+        System.out.println(orderedEdgeList);
+    }
 
 
 

@@ -6,8 +6,11 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class planData {
     List<String> orderedPathExhibitNames;
@@ -58,9 +61,9 @@ public class planData {
         if(startLoc.equals("start")) {
             startLoc = start;
         }
-        orderedPathExhibitNames.add(start);
+        orderedPathExhibitNames.add(startLoc);
         GraphPath testedPath = null;
-        String source = start;
+        String source = startLoc;
         String lastStreet = "";
         while(!visits.isEmpty()) {
             int minDist = Integer.MAX_VALUE;
@@ -135,6 +138,12 @@ public class planData {
                     + orderedPathStreets.get(i) + ", "
                     + totalRoutePaths.get(i).toString() + " ft");
         }
+    }
+    public void makeSet(){
+        Set<String> set = new HashSet<String>(visits);
+        visits = new ArrayList<>();
+        visits.addAll(set);
+        visits.remove(start);
     }
 }
 
