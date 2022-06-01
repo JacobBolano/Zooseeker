@@ -19,23 +19,26 @@ public class DirectionData {
 
 
     List<String> destinationList; // added for store/restore
+    //prevNode is used so that we know what node we are walking towards and what node we are walking away from
     String prevNode;
 
     // false indicates brief styled directions while true is for detailed styled directions
     boolean directionType;
 
+    //these are used to retrieve the streets, node names, and distances
     Graph<String, IdentifiedWeightedEdge> g;
     Map<String, ZooData.VertexInfo> vInfo;
     Map<String, ZooData.EdgeInfo> eInfo;
 
     String titleText;
 
+    //this is used to keep track of where in our trip we are
     public int currentExhibitIndex = 0;
 
     public DirectionData(List<GraphPath> orderedEdgeList, List<String> orderedExhibitNames) {
         this.orderedEdgeList = orderedEdgeList;
         this.orderedExhibitNames = orderedExhibitNames;
-
+        //initialize the direction type to brief
         this.directionType = false;
 
     }
@@ -84,11 +87,12 @@ public class DirectionData {
 
     public List<MockIndividualEdge> getCurrentExhibitDirections() {
         List<MockIndividualEdge> output;
-        if(directionType){
+        if(directionType){ //call the proper directions based on if it is brief or false
             output =  getCurrentExhibitDirectionsDetailed();
         } else {
             output =   getCurrentExhibitDirectionsBrief();
         }
+        //store that we have moved forward on our trip
         currentExhibitIndex++;
         return output;
     }
@@ -101,12 +105,14 @@ public class DirectionData {
 
         for (int i = 0; i < edgePath.size(); i++) {
             String target =  vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name;
+            //add the MockIndividualEdge that is to the node that does not match prevNode
             if(target.equals(localPrevNode)){
                 detailEdgeList.add(new MockIndividualEdge(eInfo.get(edgePath.get(i).getId()).street, vInfo.get(g.getEdgeSource(edgePath.get(i)).toString()).name, g.getEdgeWeight(edgePath.get(i))));
             } else {
                 detailEdgeList.add(new MockIndividualEdge(eInfo.get(edgePath.get(i).getId()).street, vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name, g.getEdgeWeight(edgePath.get(i))));
             }
             if (i == edgePath.size() - 1) {
+                // get the name of the exhibit that we are going to to display at top of screen
                 if(!localPrevNode.equals(vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name)){
                     titleText = vInfo.get(g.getEdgeTarget(edgePath.get(i)).toString()).name;
                 }
@@ -134,6 +140,7 @@ public class DirectionData {
             if(target.equals(localPrevNode)){
                 target = vInfo.get(g.getEdgeSource(edgePath.get(j)).toString()).name;
             }
+            //if the street of the next part of the directions is the same as the current street then combine them into one longer street
             while (j< (edgePath.size()-1) && eInfo.get(edgePath.get(j).getId()).street.equals(eInfo.get(edgePath.get(j+1).getId()).street)){
                 localPrevNode = target;
                 target = vInfo.get(g.getEdgeTarget(edgePath.get(j+1)).toString()).name;
@@ -204,9 +211,11 @@ public class DirectionData {
 
     public List<MockIndividualEdge> skipExhibit(){
         Log.d("Skipping This Exhibit", orderedExhibitNames.get(currentExhibitIndex));
+        //the actual removal of the current exhibit
         orderedEdgeList.remove(currentExhibitIndex - 1);
         orderedExhibitNames.remove(currentExhibitIndex);
 
+        //decrease index since the current is removed shrinking the size
         currentExhibitIndex--;
         ZooData.VertexInfo sourceNode = getCurrentExhibit();
         String source;
@@ -230,10 +239,12 @@ public class DirectionData {
         Log.d("Goal", goal);
         currentExhibitIndex--;
 
+        //now that a exhibit was removed we need to recalculate the path to the new next exhibit
         GraphPath<String, IdentifiedWeightedEdge> pathBetween = DijkstraShortestPath.findPathBetween(g, source, goal);
         orderedEdgeList.set(currentExhibitIndex, pathBetween);
         System.out.println(orderedEdgeList);
 
+        //return the MockIndividualEdge list that is the path to the new next exhibit
         return getCurrentExhibitDirections();
     }
 
