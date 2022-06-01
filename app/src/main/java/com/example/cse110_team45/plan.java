@@ -74,6 +74,9 @@ public class plan extends AppCompatActivity {
         editor.apply();
     }
 
+    /*
+    send the paths and exhibits to the directionDetails activity
+     */
     public void directionDetailsSend(View view) {
         Intent intent = new Intent(plan.this, DirectionDetailsActivity.class);
 

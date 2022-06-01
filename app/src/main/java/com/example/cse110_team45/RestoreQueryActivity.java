@@ -29,6 +29,7 @@ public class RestoreQueryActivity extends AppCompatActivity {
     }
 
 
+    //lets us start over with nothing added
     public void onRestartClick(View view) {
         // Open search
         Intent intent = new Intent(this, SearchActivity.class);
@@ -63,6 +64,7 @@ public class RestoreQueryActivity extends AppCompatActivity {
                 intent.putStringArrayListExtra("destinationIdList", destinationList);
                 break;
             case "PLAN":
+                //sends plan exactly what search would be sending it
                 intent = new Intent(this, plan.class);
                 destinationList = gson.fromJson(prefs.getString("destinationListJSON", ""), arrayListStringType);
                 intent.putStringArrayListExtra("destinationList", destinationList);

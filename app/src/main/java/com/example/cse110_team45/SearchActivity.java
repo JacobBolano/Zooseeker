@@ -36,6 +36,7 @@ public class SearchActivity extends AppCompatActivity {
         searchData = new SearchData(vInfo);
 
         // added MM 05/26
+        //if called from restore populates the saved exhibits
         Intent intent = getIntent();
         if(!intent.getStringArrayListExtra("destinationIdList").isEmpty()) {
             searchData.setDestinationIdList(intent.getStringArrayListExtra("destinationIdList"));
@@ -69,6 +70,9 @@ public class SearchActivity extends AppCompatActivity {
     }
     
 
+    /*
+    after clicking search update the recycle view with all things that match the search bar
+     */
     public void onSearchClick(View view) {
 
         EditText searchBar = findViewById(R.id.search_bar);
@@ -88,6 +92,7 @@ public class SearchActivity extends AppCompatActivity {
         String destination = textView.getText().toString();
 
 
+        // tries to add the clicked one to the list and updates the number accordingly
         if(this.searchData.updateDestinationList(destination)){
             exhibitCountView.setText(String.format("%d", this.searchData.getExhibitCount()));
         }
@@ -97,8 +102,9 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
-
-
+    /*
+    send the destination list to the next activity
+     */
     public void onPlanClick(View view) {
         Intent intent = new Intent(SearchActivity.this, plan.class);
 

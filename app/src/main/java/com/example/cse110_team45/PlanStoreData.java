@@ -9,6 +9,7 @@ public class PlanStoreData extends StoreData {
 
     private List<String> visits;
 
+    //store the planned exhibits we are going to visit
     public PlanStoreData(List<String> visits) {
         setLastActivity(ActivityType.PLAN);
         this.visits = visits;

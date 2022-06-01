@@ -6,6 +6,7 @@ public class SearchStoreData extends StoreData {
 
     private List<String> destinationIdList;
 
+    //store the exhibits we have already added
     public SearchStoreData(List<String> destinationIdList) {
         setLastActivity(ActivityType.SEARCH);
         this.destinationIdList = destinationIdList;
