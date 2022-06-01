@@ -9,15 +9,14 @@
 
     <View
         android:id="@+id/myRectangleView"
-        android:layout_width="350dp"
-        android:layout_height="550dp"
+        android:layout_width="357dp"
+        android:layout_height="427dp"
         android:background="@drawable/rectangle"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/directionDetails"
@@ -37,7 +36,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/direction_lists"
         android:layout_width="349dp"
-        android:layout_height="550dp"
+        android:layout_height="398dp"
         app:layout_constraintBottom_toBottomOf="@id/myRectangleView"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
@@ -49,29 +48,27 @@
         android:id="@+id/nextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="NEXT"
         android:onClick="onNextClicked"
-        app:layout_constraintBottom_toBottomOf="@id/myRectangleView"
-        app:layout_constraintHorizontal_bias="1"
+        android:text="NEXT"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.918"
         app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
         app:layout_constraintRight_toRightOf="@id/myRectangleView"
-        app:layout_constraintTop_toTopOf="@id/myRectangleView"
-        app:layout_constraintVertical_bias="1.1" />
+        app:layout_constraintTop_toBottomOf="@id/myRectangleView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/prevButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Previous"
         android:onClick="onPreviousClicked"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="646dp"
+        android:text="Previous"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
         app:layout_constraintRight_toRightOf="@id/myRectangleView"
         app:layout_constraintTop_toBottomOf="@id/myRectangleView"
-        app:layout_constraintVertical_bias="0.047"
+        app:layout_constraintVertical_bias="0.0"
 
         />
 
@@ -83,7 +80,7 @@
         android:onClick="onSettingsClicked"
         android:text="SWAP DIRECTION STYLE"
         android:textSize="9dp"
-        app:layout_constraintBottom_toTopOf="@id/myRectangleView"
+        app:layout_constraintTop_toBottomOf="@+id/directionDetails"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
         app:layout_constraintRight_toRightOf="@id/myRectangleView" />
@@ -92,14 +89,14 @@
         android:id="@+id/skipButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Skip"
         android:onClick="onSkipClick"
+        android:text="Skip"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.549"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
         app:layout_constraintRight_toRightOf="@id/myRectangleView"
         app:layout_constraintTop_toBottomOf="@id/myRectangleView"
-        app:layout_constraintVertical_bias="0.047" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/inputLocButton"
@@ -110,8 +107,8 @@
         android:onClick="inputLocButton"
         android:text="Input Location"
         android:textSize="9dp"
-        app:layout_constraintBottom_toTopOf="@id/myRectangleView"
         app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintTop_toBottomOf="@+id/directionDetails"
         app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
         app:layout_constraintRight_toRightOf="@id/myRectangleView" />
 
@@ -120,25 +117,25 @@
         android:layout_width="119dp"
         android:layout_height="wrap_content"
 
+        android:layout_marginBottom="16dp"
         android:hint="Latitude"
-        app:layout_constraintBottom_toTopOf="@id/myRectangleView"
-        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
-        app:layout_constraintRight_toRightOf="@id/myRectangleView"
-        />
+        app:layout_constraintRight_toRightOf="@id/myRectangleView" />
+
     <EditText
         android:id="@+id/inputLong"
         android:layout_width="119dp"
         android:layout_height="wrap_content"
 
+        android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif"
-        app:layout_constraintBottom_toTopOf="@id/myRectangleView"
-        app:layout_constraintHorizontal_bias="1"
+        android:hint="Longitutde"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.978"
         app:layout_constraintLeft_toLeftOf="@id/myRectangleView"
-        app:layout_constraintRight_toRightOf="@id/myRectangleView"
-        android:hint="Longitutde"/>
-
-
+        app:layout_constraintRight_toRightOf="@id/myRectangleView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
