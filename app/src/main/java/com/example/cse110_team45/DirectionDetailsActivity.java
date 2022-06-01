@@ -181,6 +181,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                         location.getLatitude(), location.getLongitude());
                 if(prevDistance < distanceBetween(currLocation, exhibitLatLng.get(finalCurrExhibit))){
                     directionData.changeCurrentDirection(getNearestExhibit(currLocation));
+                    Log.d("Should Update", "AAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHH");
                     adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
                     textView.setText(directionData.getTitleText());
                 }
