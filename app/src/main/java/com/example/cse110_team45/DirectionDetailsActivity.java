@@ -3,8 +3,11 @@ package com.example.cse110_team45;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.location.LocationManager;
+
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,12 +17,20 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.cse110_team45.location.Coord;
+import com.example.cse110_team45.location.LocationModel;
+import com.example.cse110_team45.location.LocationPermissionChecker;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
@@ -55,12 +66,27 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     boolean buttonMostRecentlyPressed=true;
 
 
+    public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
+
+    private boolean useLocationService;
+
+
+    private LocationModel model;
 
     @Override
     @SuppressLint("MissingPermission")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction_details);
+
+        //NEW CODE
+
+
+        model = new ViewModelProvider(this).get(LocationModel.class);
+
+
+
+        //NEW CODE
 
         Intent intent = getIntent();
 
@@ -113,9 +139,6 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
         textView.setText(directionData.getTitleText());
-
-
-        // NEW STUFF
 
         if (PermissionChecker.ensurePermission()) return;
 
@@ -191,6 +214,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
             public void onLocationChanged(@NonNull Location location){
                 LatLng currLocation = new LatLng(
                         location.getLatitude(), location.getLongitude());
+                Log.d("Current Location", currLocation.toString());
                 if(prevDistance < distanceBetween(currLocation, exhibitLatLng.get(finalCurrExhibit))){
                     directionData.changeCurrentDirection(getNearestExhibit(currLocation));
                     Log.d("Should Update", "AAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHH");
@@ -225,6 +249,8 @@ public class DirectionDetailsActivity extends AppCompatActivity {
             }
         };
         locationManager.requestLocationUpdates(provider,0,0f,locationListener);
+
+
 
     }
 
@@ -342,5 +368,32 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         }
         nextNode = orderedExhibitID.get(orderedExhibitIDIndex);
     }
+
+    public void inputLocButton(View view) {
+
+        wantToReplan = false;
+
+        EditText inputLongEdit = (EditText) findViewById(R.id.inputLong);
+        EditText inputLatEdit = (EditText) findViewById(R.id.inputLat);
+
+        Log.d("Input Long", inputLongEdit.getText().toString());
+        Log.d("Input Lat", inputLatEdit.getText().toString());
+
+        Double inputLongDouble = Double.parseDouble(inputLongEdit.getText().toString());
+        Double inputLatDouble = Double.parseDouble(inputLatEdit.getText().toString());
+
+
+        Coord inputtedCoordinate = new Coord(inputLatDouble, inputLongDouble);
+        mockLocation(inputtedCoordinate);
+
+
+    }
+
+    public void mockLocation(Coord coords) {
+        model.mockLocation(coords);
+        wantToReplan = true;
+    }
+
+
 
 }
