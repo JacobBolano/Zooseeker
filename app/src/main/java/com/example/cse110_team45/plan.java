@@ -84,7 +84,7 @@ public class plan extends AppCompatActivity {
         Log.d("destinationList", this.PlanData.destinationList.toString());
         intent.putExtra("orderedEdgeList", (Serializable) this.PlanData.orderedPathEdgeList);
         // MM for compatibility with store/restore
-        intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.PlanData.destinationList);
+        //intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.PlanData.destinationList);
         // MM for compatibility with store/restore
         intent.putExtra("currentExhibitIndex",0);
         startActivity(intent);
