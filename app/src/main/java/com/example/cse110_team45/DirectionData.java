@@ -50,9 +50,9 @@ public class DirectionData {
         return currentExhibitIndex;
     }
 
-    public void setDestinationList(List<String> destinationList) {
-        this.destinationList = destinationList;
-    }
+    //public void setDestinationList(List<String> destinationList) {
+       // this.destinationList = destinationList;
+    //}
 
     public List<String> getDestinationList() {
         return destinationList;

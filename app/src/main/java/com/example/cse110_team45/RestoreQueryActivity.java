@@ -1,5 +1,6 @@
 package com.example.cse110_team45;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -21,6 +22,8 @@ import java.util.Map;
 public class RestoreQueryActivity extends AppCompatActivity {
 
     private planData PlanData;
+    static Type arrayListStringType = new TypeToken<ArrayList<String>>() {
+    }.getType();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,31 +34,37 @@ public class RestoreQueryActivity extends AppCompatActivity {
 
     public void onRestartClick(View view) {
         // Open search
-        Intent intent = new Intent(this, SearchActivity.class);
-        intent.putStringArrayListExtra("destinationIdList", new ArrayList<>());
+        Intent intent = getRestartIntent();
         startActivity(intent);
     }
+
 
     public void onRestoreClick(View view) {
         // store the page on close. Ideally we would have an option for every page, defaulting
         // unimportant pages to their calling pages (so if you open settings from Plan, we save the
         // state of plan when you close). In practice we'll probably only save on certain pages
         // (search, plan, and directions).
-        // so store the page
-        // for search, store destinationIDList
-        // for plan, store visits (intent already has support for passing data)
-        // for directions, store orderedEdgeLists and orderedExhibitNames, store currentExhibitIndex
-        // Open search
         Intent intent;
-        Gson gson = new Gson();
-        ArrayList<String> destinationList;
-        Type arrayListStringType = new TypeToken<ArrayList<String>>() {
-        }.getType();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        //SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        intent = getRestoreIntent(prefs);
+        startActivity(intent);
+    }
+
+    @NonNull
+    private Intent getRestartIntent() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putStringArrayListExtra("destinationIdList", new ArrayList<>());
+        return intent;
+    }
+
+    @NonNull
+    public Intent getRestoreIntent(SharedPreferences prefs) {
+        Gson gson = new Gson();
+
+        ArrayList<String> destinationList;
+        Intent intent;
         String lastActivity = prefs.getString("lastActivity", "NONE"); // check activity before close
-        // StoreData data = StoreData.loadJSON(this,"exit_state.json");
         switch (lastActivity) {
             case "SEARCH":
                 intent = new Intent(this, SearchActivity.class);
@@ -69,11 +78,8 @@ public class RestoreQueryActivity extends AppCompatActivity {
                 break;
             case "DIRECTIONS":
                 intent = new Intent(this, DirectionDetailsActivity.class);
-                // ArrayList<String> orderedExhibitNames = gson.fromJson(prefs.getString("orderedExhibitNamesJSON", ""), arrayListStringType);
-                // intent.putStringArrayListExtra("orderedExhibitNames", orderedExhibitNames);
-                // intent.putExtra("orderedEdgeListJSON", prefs.getString("orderedEdgeListJSON", ""));
                 int currentExhibitIndex = prefs.getInt("currentExhibitIndex", 0);
-                destinationList = gson.fromJson(prefs.getString("destinationListJSON",""),arrayListStringType);
+                destinationList = gson.fromJson(prefs.getString("destinationListJSON",""), arrayListStringType);
 
                 // run plan backend
 
@@ -93,7 +99,7 @@ public class RestoreQueryActivity extends AppCompatActivity {
                 intent.putExtra("currentExhibitIndex", currentExhibitIndex);
                 intent.putStringArrayListExtra("orderedExhibitNames", (ArrayList<String>) this.PlanData.orderedPathExhibitNames);
                 intent.putExtra("orderedEdgeList", (Serializable) this.PlanData.orderedPathEdgeList);
-                intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.PlanData.destinationList);
+                //intent.putStringArrayListExtra("destinationList", (ArrayList<String>) this.PlanData.destinationList);
                 break;
             default:
                 intent = new Intent(this, SearchActivity.class);
@@ -101,6 +107,6 @@ public class RestoreQueryActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
         }
-        startActivity(intent);
+        return intent;
     }
 }

@@ -39,7 +39,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         directionData = new DirectionData((List<GraphPath>) intent.getSerializableExtra("orderedEdgeList"), intent.getStringArrayListExtra("orderedExhibitNames"));
 
         // MM we store the destination list so that we can call the plan backend if we restore the directions from storage
-        directionData.setDestinationList(intent.getStringArrayListExtra("destinationList"));
+        //directionData.setDestinationList(intent.getStringArrayListExtra("destinationList"));
         // MM read in currentExhibitIndex so that directions can be restored from file
         directionData.setCurrentExhibitIndex(intent.getIntExtra("currentExhibitIndex",0));
         //directionData.setCurrentExhibitIndex(intent.getIntExtra("currentExhibitIndex"));
@@ -99,7 +99,8 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("lastActivity", "DIRECTIONS");
         Gson gson = new Gson();
-        String destinationListJSON = gson.toJson(directionData.getDestinationList());
+        String destinationListJSON = gson.toJson(directionData.orderedExhibitNames.subList(1,directionData.orderedExhibitNames.size() -1));
+        //String destinationListJSON = gson.toJson(directionData.getDestinationList());
         editor.putString("destinationListJSON",destinationListJSON);
         editor.putInt("currentExhibitIndex",directionData.getCurrentExhibitIndex()-1);
         editor.apply();
