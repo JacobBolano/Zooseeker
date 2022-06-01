@@ -179,11 +179,15 @@ public class DirectionDetailsActivity extends AppCompatActivity {
             public void onLocationChanged(@NonNull Location location){
                 LatLng currLocation = new LatLng(
                         location.getLatitude(), location.getLongitude());
-                if(prevDistance < distanceBetween(currLocation, exhibitLatLng.get(finalCurrExhibit))){
+                Log.d("prevDistance", ""+prevDistance);
+                Log.d("currDistance", ""+distanceBetween(currLocation, exhibitLatLng.get(finalCurrExhibit)));
+                if(prevDistance <= distanceBetween(currLocation, exhibitLatLng.get(finalCurrExhibit))){
                     directionData.changeCurrentDirection(getNearestExhibit(currLocation));
+                    directionData.currentExhibitIndex--;
                     adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
                     textView.setText(directionData.getTitleText());
                 }
+                prevDistance = distanceBetween(currLocation, exhibitLatLng.get(finalCurrExhibit));
                 if (wantToReplan) {
                     Log.d("Replan Route", String.format("Location changed %s", location));
                     double currDistance = distanceBetween(currLocation, finalExhibitLatLng.get(nextNode));

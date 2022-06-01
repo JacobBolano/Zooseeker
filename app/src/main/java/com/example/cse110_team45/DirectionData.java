@@ -187,11 +187,16 @@ public class DirectionData {
         else {
             source = sourceNode.id;
         }
+        String dest = orderedExhibitNames.get(currentExhibitIndex);
+        if(vInfo.get(dest).group_id != null){
+            dest = vInfo.get(dest).group_id;
+        }
         Log.d("Source", source);
+        Log.d("dest", dest);
 
-
-        GraphPath<String, IdentifiedWeightedEdge> pathBetween = DijkstraShortestPath.findPathBetween(g, source, orderedExhibitNames.get(currentExhibitIndex));
+        GraphPath<String, IdentifiedWeightedEdge> pathBetween = DijkstraShortestPath.findPathBetween(g, source, dest);
         orderedEdgeList.set(currentExhibitIndex-1, pathBetween);
+        Log.d("currIndex", ""+(currentExhibitIndex-1));
         System.out.println(orderedEdgeList);
     }
 
