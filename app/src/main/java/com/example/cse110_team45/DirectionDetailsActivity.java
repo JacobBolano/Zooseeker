@@ -38,6 +38,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     DirectionAdapter adapter;
 
     DirectionData directionData;
+
     List<String> orderedExhibitNames;
     List<GraphPath> orderedEdgeList;
     String closestExhibit;
@@ -50,6 +51,11 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     boolean wantToReplan;
     private final permissionChecker PermissionChecker = new permissionChecker(this);
 
+
+    boolean buttonMostRecentlyPressed=true;
+
+
+
     @Override
     @SuppressLint("MissingPermission")
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +63,14 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_direction_details);
 
         Intent intent = getIntent();
+
         exhibitLatLng = new HashMap<String, LatLng>();
         orderedExhibitID = new ArrayList<String>();
         wantToReplan = true;
+
+
+        // get data sent over by plan
+
         directionData = new DirectionData((List<GraphPath>) intent.getSerializableExtra("orderedEdgeList"), intent.getStringArrayListExtra("orderedExhibitNames"));
 
         // MM we store the destination list so that we can call the plan backend if we restore the directions from storage
@@ -87,6 +98,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         vInfo = ZooData.loadVertexInfoJSON("exhibit_info.json", this);
         Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("trail_info.json", this);
 
+        // add this information to the directionData so that it can be used
         directionData.addGraphs(g, vInfo, eInfo);
 
         adapter = new DirectionAdapter();
@@ -95,7 +107,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         Log.d("direction details", "Direction details: " + directionData.orderedEdgeList.size());
 
-
+        //populate the screen with directions to the first exhibit
         recyclerView = findViewById(R.id.direction_lists);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -224,6 +236,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     }
 
 
+
     public void onNextClicked(View view) {
 
         if(directionData.getCurrentExhibitIndex() < directionData.orderedEdgeList.size()){
@@ -232,20 +245,46 @@ public class DirectionDetailsActivity extends AppCompatActivity {
             adapter.setIndividualDirectionListItems(directionData.getCurrentExhibitDirections());
             textView.setText(directionData.getTitleText());
             setNextNode();
+
+            buttonMostRecentlyPressed=true;
+
         }
-        else{
+        else{ //if there is nothing left you go to you have completed your zoo journey
             finish();
         }
 
     }
 
     public void onPreviousClicked(View view) {
+        //update screen with directions to previous exhibit
         Log.d("Previous Clicked!", "True");
         adapter.setIndividualDirectionListItems(directionData.getPreviousDirections());
         textView.setText(directionData.getTitleText());
+
         wantToReplan = true;
         setNextNode();
+
+        buttonMostRecentlyPressed=false;
+
     }
+
+    public void onSettingsClicked(View view) {
+        //flip the boolean value that represents direction type
+        directionData.setDirectionType(!directionData.getDirectionType());
+        if(buttonMostRecentlyPressed){
+            //if next was most recently pressed refresh the screen by calling previous and then next
+            //this makes it so that the prevNode inside directionData is properly set
+            onPreviousClicked(view);
+            onNextClicked(view);
+        } else {
+            //if previous was most recently pressed refresh the screen by calling next and then previous
+            //this makes it so that the prevNode inside directionData is properly set to give directions backwards
+            onNextClicked(view);
+            onPreviousClicked(view);
+        }
+
+    }
+
 
 
     @Override
@@ -262,7 +301,12 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     }
 
     public void onSkipClick(View view) {
+
         if(directionData.getCurrentExhibitIndex() < directionData.orderedEdgeList.size() && directionData.currentExhibitIndex > 0){
+
+
+            //use the .skipExhibit() to remove the current exhibit from the list, this also returns the new directions
+
             adapter.setIndividualDirectionListItems(directionData.skipExhibit());
             textView.setText(directionData.getTitleText());
             wantToReplan = true;
