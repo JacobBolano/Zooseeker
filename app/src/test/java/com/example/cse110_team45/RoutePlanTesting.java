@@ -73,7 +73,7 @@ public class RoutePlanTesting {
             Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", activity);
 
             PlanData = new planData(g, vInfo, eInfo, visits);
-            PlanData.pathFinding();
+            PlanData.pathFinding("start");
             assertEquals(5, PlanData.orderedPathExhibitNames.size());
             assertEquals("entrance_exit_gate", PlanData.orderedPathExhibitNames.get(0));
             assertEquals("gators", PlanData.orderedPathExhibitNames.get(1));
@@ -99,7 +99,7 @@ public class RoutePlanTesting {
             Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", activity);
 
             PlanData = new planData(g, vInfo, eInfo, visits);
-            PlanData.pathFinding();
+            PlanData.pathFinding("start");
             assertEquals(2, PlanData.orderedPathExhibitNames.size());
             assertEquals("entrance_exit_gate", PlanData.orderedPathExhibitNames.get(0));
             assertEquals("entrance_exit_gate", PlanData.orderedPathExhibitNames.get(PlanData.orderedPathExhibitNames.size()-1));
