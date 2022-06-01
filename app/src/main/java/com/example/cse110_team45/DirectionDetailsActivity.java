@@ -78,7 +78,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         //NEW CODE
 
-        useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
+        useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, true);
 
 
         //NEW CODE
@@ -165,6 +165,9 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                         Log.d("new visit", newVisits.toString());
                         planData PlanData = new planData(g, vInfo, eInfo, newVisits);
                         PlanData.makeSet();
+                        if (vInfo.get(closestExhibit).group_id != null) {
+                            closestExhibit = vInfo.get(closestExhibit).group_id;
+                        }
                         Log.d("PlanData exhibit names", PlanData.orderedPathExhibitNames.toString());
                         PlanData.pathFinding(closestExhibit);
                         Log.d("PlanData exhibit names", PlanData.orderedPathExhibitNames.toString());
@@ -339,7 +342,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     }
 
     public String getNearestExhibit(LatLng currLoc){
-        double nearestExhibitDist = Float.MAX_VALUE;
+        double nearestExhibitDist = Double.MAX_VALUE;
         String nearestExhibit = "";
         for(String key : vInfo.keySet()){
             double distBetweenCurr = distanceBetween(new LatLng(vInfo.get(key).lat,vInfo.get(key).lng), currLoc);
@@ -348,6 +351,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                 nearestExhibit = key;
             }
         }
+        Log.d("Nearest Exhibit: ", nearestExhibit);
         return nearestExhibit;
     }
 
