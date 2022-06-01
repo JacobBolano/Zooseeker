@@ -65,9 +65,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
     boolean buttonMostRecentlyPressed=true;
 
-
     public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
-
     private boolean useLocationService;
 
 
@@ -84,6 +82,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         model = new ViewModelProvider(this).get(LocationModel.class);
 
+        useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
 
 
         //NEW CODE
@@ -203,6 +202,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
         var provider = LocationManager.GPS_PROVIDER;
         var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
         Map<String, LatLng> finalExhibitLatLng = exhibitLatLng;
         String currExhibit = directionData.orderedExhibitNames.get(directionData.currentExhibitIndex);
         if (vInfo.get(directionData.orderedExhibitNames.get(directionData.currentExhibitIndex)).group_id != null) {
@@ -248,6 +248,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
                 }
             }
         };
+
         locationManager.requestLocationUpdates(provider,0,0f,locationListener);
 
 
@@ -371,8 +372,6 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
     public void inputLocButton(View view) {
 
-        wantToReplan = false;
-
         EditText inputLongEdit = (EditText) findViewById(R.id.inputLong);
         EditText inputLatEdit = (EditText) findViewById(R.id.inputLat);
 
@@ -391,7 +390,6 @@ public class DirectionDetailsActivity extends AppCompatActivity {
 
     public void mockLocation(Coord coords) {
         model.mockLocation(coords);
-        wantToReplan = true;
     }
 
 
