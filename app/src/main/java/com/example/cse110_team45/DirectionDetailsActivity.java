@@ -62,7 +62,7 @@ public class DirectionDetailsActivity extends AppCompatActivity {
     double prevDistance = Double.MAX_VALUE;
     boolean wantToReplan;
     private final permissionChecker PermissionChecker = new permissionChecker(this);
-
+    boolean wantToUseLocation;
 
     boolean buttonMostRecentlyPressed=true;
 
@@ -76,12 +76,9 @@ public class DirectionDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction_details);
 
-        //NEW CODE
+        wantToUseLocation = false;
+        useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, wantToUseLocation);
 
-        useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, true);
-
-
-        //NEW CODE
 
         Intent intent = getIntent();
 
